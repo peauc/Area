@@ -37,6 +37,44 @@
         <artifactId>mockito-all</artifactId>
         <version>1.9.5</version>
       </dependency>
+      <!-- Vaadin -->
+      <dependency>
+          <groupId>com.vaadin</groupId>
+          <artifactId>vaadin-server</artifactId>
+          <version>8.1.5</version>
+      </dependency>
+      <dependency>
+          <groupId>com.vaadin</groupId>
+          <artifactId>vaadin-client-compiled</artifactId>
+          <version>8.1.5</version>
+      </dependency>
+      <dependency>
+          <groupId>com.vaadin</groupId>
+          <artifactId>vaadin-client</artifactId>
+          <version>8.1.5</version>
+          <scope>provided</scope>
+      </dependency>
+      <dependency>
+          <groupId>com.vaadin</groupId>
+          <artifactId>vaadin-themes</artifactId>
+          <version>8.1.5</version>
+      </dependency>
+      <dependency>
+          <groupId>com.vaadin</groupId>
+          <artifactId>vaadin-client-compiler</artifactId>
+          <version>8.1.5</version>
+      </dependency>
+      <dependency>
+          <groupId>com.vaadin</groupId>
+          <artifactId>vaadin-theme-compiler</artifactId>
+          <version>7.1.8</version>
+      </dependency>
+      <dependency>
+          <groupId>javax.servlet</groupId>
+          <artifactId>servlet-api</artifactId>
+          <version>2.4</version>
+          <scope>provided</scope>
+      </dependency>
   </dependencies>
     <build>
         <plugins>
@@ -118,6 +156,42 @@
                         <phase>package</phase>
                         <goals>
                             <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-maven-plugin</artifactId>
+                <version>8.0.7</version>
+                <configuration>
+                    <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
+                    <!-- <runTarget>mobilemail</runTarget> -->
+                    <!-- We are doing "inplace" but into subdir VAADIN/widgetsets. This
+                    way compatible with Vaadin eclipse plugin. -->
+                    <webappDirectory>${basedir}/src/main/java/eu/epitech/area
+                    </webappDirectory>
+                    <hostedWebapp>${basedir}/src/main/java/eu/epitech/area
+                    </hostedWebapp>
+                    <noServer>true</noServer>
+                    <!-- Remove draftCompile when project is ready -->
+                    <draftCompile>false</draftCompile>
+                    <compileReport>true</compileReport>
+                    <style>OBF</style>
+                    <strict>true</strict>
+                    <runTarget>http://localhost:8080/</runTarget>
+                </configuration>
+                <executions>
+                    <execution>
+                        <configuration>
+                            <!-- if you don't specify any modules, the plugin will find them -->
+                            <!-- <modules> <module>com.vaadin.demo.mobilemail.gwt.ColorPickerWidgetSet</module>
+                            </modules> -->
+                        </configuration>
+                        <goals>
+                            <goal>resources</goal>
+                            <goal>update-widgetset</goal>
+                            <goal>compile</goal>
                         </goals>
                     </execution>
                 </executions>
