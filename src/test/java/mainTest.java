@@ -7,6 +7,8 @@ import static org.junit.Assert.*;
 public class mainTest {
     @Test
     public void IsFiring() {
+       Main main = new Main();
+       main.greet();
        assertTrue(1==1);
     }
 }
