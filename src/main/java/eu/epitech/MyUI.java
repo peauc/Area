@@ -23,7 +23,7 @@
 //        final VerticalLayout layout = new VerticalLayout();
 //
 //        final TextField name = new TextField();
-//        name.setCaption("Type your name here:");
+//        name.setCaption("FieldType your name here:");
 //
 //        Button button2 = new Button("Hello");
 //        button2.setWidth("1000");
