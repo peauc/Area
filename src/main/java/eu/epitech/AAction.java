@@ -1,20 +1,15 @@
 package eu.epitech;
 
-import com.sun.istack.internal.NotNull;
-import jdk.internal.jline.internal.Nullable;
 import elemental.json.Json;
 
 import java.util.List;
 import java.util.Map;
 
 public abstract class AAction implements IAction {
-    @NotNull
     protected String name;
 
-    @NotNull
     protected String description;
 
-    @Nullable
     protected Json config = null;
 
     public Json getConfig() {
