@@ -1,19 +1,14 @@
 package eu.epitech;
 
-import com.sun.istack.internal.NotNull;
 import elemental.json.Json;
-import jdk.internal.jline.internal.Nullable;
 
 import java.util.List;
 
 public abstract class AReaction implements IReaction {
-    @NotNull
     protected String name;
 
-    @NotNull
     protected String description;
 
-    @Nullable
     protected Json config = null;
 
     public String getName() {
