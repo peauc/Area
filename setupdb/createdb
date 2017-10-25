@@ -1,0 +1,34 @@
+#========================================================
+#Creating database :
+#========================================================
+#!/bin/bash
+
+red='\033[01;31m'
+blue='\033[01;34m'
+green='\033[01;32m'
+norm='\033[00m'
+
+#Do not change 'dbname', otherwise you will have to change it in "setupdb.sql" too
+
+dbname='area'
+username='area'
+passwd='djh7.HDi5332jczj'
+
+EXPECTED_ARGS=0
+E_BADARGS=65
+MYSQL=`which mysql`
+
+if [ $# -ne $EXPECTED_ARGS ]
+then
+exit $E_BADARGS
+fi
+
+echo "\n${blue}-Creating mysql DATABASE ${red}${dbname}${norm}\n${blue}-Creating mysql USER ${red}${username}${norm}\n"
+
+#========================================================
+#Generating tables :
+#========================================================
+
+$MYSQL -uroot -p < setupdb.sql && echo " ---> [${green}OK${norm}]" || echo " ---> [${red}ERROR${norm}]"
+
+#End of the creation script
