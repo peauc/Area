@@ -2,13 +2,6 @@ package eu.epitech;
 
 public class ApiInfo {
 
-	public enum Name {
-		FACEBOOK,
-		TWITTER,
-		LINKEDIN,
-		GOOGLE_CALENDAR
-	}
-
 	public final String name;
 	public final Object scribeApi;
 	public final String apiKey;
