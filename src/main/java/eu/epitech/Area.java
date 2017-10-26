@@ -14,6 +14,11 @@ public class Area {
     	this.userRef = user;
 	}
 
+	public Area(User user, String name) {
+    	this.name = name;
+    	this.userRef = user;
+	}
+
     public Area(AAction action, AReaction reaction, User user) {
     	this.name = action.getName() + "_to_" + reaction.getName();
     	this.action = action;

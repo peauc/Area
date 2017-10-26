@@ -144,7 +144,7 @@ public abstract class AReaction implements IReaction {
 	}
 
     @Override
-    public abstract void execute(Token token, JSONObject actionOutput);
+    public abstract void execute(String token, JSONObject actionOutput);
 
     @Override
     public abstract boolean isExecutable(List<String> fields);

@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface IReaction {
 
-    void execute(Token token, JSONObject actionOutput);
+    void execute(String token, JSONObject actionOutput);
 
     boolean isExecutable(List<String> fields);
 
