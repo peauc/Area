@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class AAction implements IAction {
+	protected ApiUtils.Name api;
     protected String name;
     protected String description;
     protected JSONObject config = null;
@@ -16,8 +17,11 @@ public abstract class AAction implements IAction {
 	static protected List<String> fields;
     static private Map<String, FieldType> requiredConfigFields = null;
 
+	public ApiUtils.Name getApi() {
+		return api;
+	}
 
-    public JSONObject getConfig() {
+	public JSONObject getConfig() {
         return config;
     }
 
@@ -51,8 +55,9 @@ public abstract class AAction implements IAction {
 			if (areaId == -1) // area not found
 				return;
 			if ((actionId = this.getDbId(dbm, area)) == -1) { // action not found -> create a new db entry
-				pstmt = dbm.getConnection().prepareStatement("INSERT INTO action(fk_action_area, name, description, config, previous_state) VALUES (?, ?, ?, ?, ?)");
+				pstmt = dbm.getConnection().prepareStatement("INSERT INTO action(fk_action_area, api_name, name, description, config, previous_state) VALUES (?, ?, ?, ?, ?, ?)");
 				pstmt.setInt(1, areaId);
+				pstmt.setString(2, this.api.name());
 				pstmt.setString(2, this.name);
 				pstmt.setString(3, this.description);
 				pstmt.setString(4, this.config.toString());

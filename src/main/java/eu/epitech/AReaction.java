@@ -9,11 +9,16 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class AReaction implements IReaction {
+	protected ApiUtils.Name api;
     protected String name;
     protected String description;
     protected JSONObject config = null;
 	static protected List<String> requiredActionfields = null;
 	static private Map<String, FieldType> requiredConfigFields = null;
+
+	public ApiUtils.Name getApi() {
+		return api;
+	}
 
     public String getName() {
         return name;

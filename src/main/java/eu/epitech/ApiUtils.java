@@ -6,7 +6,7 @@ import java.util.Map;
 /*
 *** Static constant class providing a way to identify a token based on an enum's value as well as a string.
  */
-public final class ApiUtils {
+public class ApiUtils {
 
 	public enum Name {
 		FACEBOOK,
