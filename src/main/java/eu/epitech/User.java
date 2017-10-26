@@ -20,9 +20,10 @@ public class User {
 		this.areas = new ArrayList<>();
 	}
 
-	/*
-	*** Adds the user to database.
-	*** Will not update anything if the user is already present.
+	/**
+	 * Adds the user to the database
+	 * Will not update anything if the user is already present
+	 * @param dbm
 	 */
 	public void  addToDatabase(DatabaseManager dbm) {
 		PreparedStatement pstmt = null;
@@ -49,9 +50,12 @@ public class User {
 		}
 	}
 
-	/*
-	*** Adds a token to the database.
-	*** Will update a token's value if it finds one already belonging to the user.
+	/**
+	 * Adds a token to the database
+	 * Will update a token's value if it finds one belonging to the user
+	 * @param dbm
+	 * @param apiName
+	 * @param token
 	 */
 	public void addTokenToDatabase(DatabaseManager dbm, ApiUtils.Name apiName, String token) {
 		PreparedStatement pstmt = null;

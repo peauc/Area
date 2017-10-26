@@ -17,7 +17,6 @@ public interface IReaction {
 
     boolean setConfig(JSONObject conf);
 
-    // Adds the reaction to the database or update its config if one is already present.
     void addToDatabase(DatabaseManager dbm, Area area);
 
     void removeFromDatabase(DatabaseManager dbm, Area area);

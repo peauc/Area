@@ -22,6 +22,46 @@ public class ApiUtils {
 		put("GOOGLE_CALENDAR", Name.GOOGLE_CALENDAR);
 	}};
 
+	public static final Map<String, String> corrTableActionName = new HashMap<String, String>() {{
+		put("", "");
+	}};
+
+	public static final Map<String, String> corrTableReactionName = new HashMap<String, String>() {{
+		put("", "");
+	}};
+
+	public static AAction createActionFromName(String name) {
+		AAction action = null;
+		String className;
+
+		try {
+			if ((className = ApiUtils.corrTableActionName.get(name)) == null) {
+				System.err.println(name + " does not correspond to any action class");
+				return (null);
+			}
+			action = (AAction) Class.forName (className).newInstance();
+		} catch (Exception e) {
+			System.err.println("Class couldn't be created");
+		}
+		return (action);
+	}
+
+	public static AReaction createReactionFromName(String name) {
+		AReaction reaction = null;
+		String className;
+
+		try {
+			if ((className = ApiUtils.corrTableReactionName.get(name)) == null) {
+				System.err.println(name + " does not correspond to any reaction class");
+				return (null);
+			}
+			reaction = (AReaction) Class.forName (className).newInstance();
+		} catch (Exception e) {
+			System.err.println("Class couldn't be created");
+		}
+		return (reaction);
+	}
+
 	private ApiUtils() {
 	}
 }

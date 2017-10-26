@@ -14,8 +14,27 @@ public abstract class AAction implements IAction {
     protected String description;
     protected JSONObject config = null;
     protected JSONObject previousDatas = null;
-	static protected List<String> fields;
-    static private Map<String, FieldType> requiredConfigFields = null;
+	protected List<String> fields;
+    protected Map<String, FieldType> requiredConfigFields = null;
+
+    private AAction() {
+	}
+
+	/**
+	 * Every action must call this constructor.
+	 * @param apiName
+	 * @param actionName
+	 * @param description
+	 * @param returnedFields
+	 * @param requiredConfigFields
+	 */
+    public AAction(ApiUtils.Name apiName, String actionName, String description, List<String> returnedFields, Map<String, FieldType> requiredConfigFields) {
+    	this.api = apiName;
+    	this.name = actionName;
+    	this.description = description;
+    	this.fields = returnedFields;
+    	this.requiredConfigFields = requiredConfigFields;
+	}
 
 	public ApiUtils.Name getApi() {
 		return api;
@@ -41,9 +60,19 @@ public abstract class AAction implements IAction {
         this.description = description;
     }
 
-    /*
-    *** Adds the action to the database or update it if one is already present.
-     */
+	public JSONObject getPreviousDatas() {
+		return previousDatas;
+	}
+
+	public void setPreviousDatas(JSONObject previousDatas) {
+		this.previousDatas = previousDatas;
+	}
+
+	/**
+	 * Adds the action to the database or update it if one is already present.
+	 * @param dbm
+	 * @param area
+	 */
 	@Override
 	public void addToDatabase(DatabaseManager dbm, Area area) {
 		PreparedStatement pstmt = null;
@@ -83,6 +112,12 @@ public abstract class AAction implements IAction {
 		}
 	}
 
+	/**
+	 * Removes the action from the database
+	 * Should only be called by the Area that contains it
+	 * @param dbm
+	 * @param area
+	 */
 	@Override
 	public void removeFromDatabase(DatabaseManager dbm, Area area) {
 		PreparedStatement pstmt = null;

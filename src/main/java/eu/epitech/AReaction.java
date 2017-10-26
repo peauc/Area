@@ -13,8 +13,24 @@ public abstract class AReaction implements IReaction {
     protected String name;
     protected String description;
     protected JSONObject config = null;
-	static protected List<String> requiredActionfields = null;
-	static private Map<String, FieldType> requiredConfigFields = null;
+	protected List<String> requiredActionFields = null;
+	protected Map<String, FieldType> requiredConfigFields = null;
+
+	/**
+	 * Every reaction must call this contructor.
+	 * @param apiName
+	 * @param reactionName
+	 * @param description
+	 * @param requiredActionFields
+	 * @param requiredConfigFields
+	 */
+	public AReaction(ApiUtils.Name apiName, String reactionName, String description, List<String> requiredActionFields, Map<String, FieldType> requiredConfigFields) {
+		this.api = apiName;
+		this.name = reactionName;
+		this.description = description;
+		this.requiredActionFields = requiredActionFields;
+		this.requiredConfigFields = requiredConfigFields;
+	}
 
 	public ApiUtils.Name getApi() {
 		return api;
@@ -40,10 +56,12 @@ public abstract class AReaction implements IReaction {
         return config;
     }
 
-    /*
-    *** Adds the reaction to the database or update its config if one is already present.
-     */
-    @Override
+	/**
+	 * Adds the reaction to the database or update it's config if one is already present.
+	 * @param dbm
+	 * @param area
+	 */
+	@Override
 	public void addToDatabase(DatabaseManager dbm, Area area) {
 		PreparedStatement pstmt = null;
 		int areaId = -1;
@@ -79,6 +97,12 @@ public abstract class AReaction implements IReaction {
 		}
 	}
 
+	/**
+	 * Removes the reaction from the database
+	 * Should only be called by the Area that contains it
+	 * @param dbm
+	 * @param area
+	 */
 	@Override
 	public void removeFromDatabase(DatabaseManager dbm, Area area) {
 		PreparedStatement pstmt = null;

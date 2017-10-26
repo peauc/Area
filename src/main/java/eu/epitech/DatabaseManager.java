@@ -1,5 +1,7 @@
 package eu.epitech;
 
+import org.json.JSONObject;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -21,8 +23,11 @@ public class DatabaseManager {
 		}
 	}
 
-	/*
-	*** Checks if the database recognizes this username as part of the users pool.
+	/**
+	 * Checks if the database recognizes this username as part of the users pool
+	 * Must be called at login when checking the username
+	 * @param userName
+	 * @return
 	 */
 	public boolean hasUser(String userName) {
 		PreparedStatement pstmt = null;
@@ -52,9 +57,12 @@ public class DatabaseManager {
 		return (true);
 	}
 
-	/*
-	*** Returns all stocked information about a user or null if the authentication failed.
-	*** Better to call it after a call to hasUser().
+	/**
+	 * returns all stocked information about a user, or null if the authentication failed
+	 * Better to call it after a call to hasUser()
+	 * @param name
+	 * @param password
+	 * @return
 	 */
 	public User retrieveUserFromDatabase(String name, String password) {
 		User user = null;
@@ -66,7 +74,7 @@ public class DatabaseManager {
 			pstmt.setString(1, name);
 			rs = pstmt.executeQuery();
 			if (rs.next()) { // If a corresponding user is found, checks password validity.
-				if (!Objects.equals(rs.getString("password"), password))
+				if (!Objects.equals(password, rs.getString("password")))
 					return (null);
 				user = new User(rs.getString("name"), rs.getString("password"));
 				this.retrieveUserTokens(user, rs.getInt("id"));
@@ -91,8 +99,10 @@ public class DatabaseManager {
 		return (user);
 	}
 
-	/*
-	*** Fills the user's tokens based on those stored, regardless of their validity.
+	/**
+	 * Fills the user's tokens based on those stored, regardless of their validity
+	 * @param user
+	 * @param userId
 	 */
 	public void retrieveUserTokens(User user, int userId) {
 		PreparedStatement pstmt = null;
@@ -123,6 +133,11 @@ public class DatabaseManager {
 		}
 	}
 
+	/**
+	 * Fills the user's areas, based on those stored in the database, and the actions within
+	 * @param user
+	 * @param userId
+	 */
 	private void retrieveUserAreas(User user, int userId) {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -155,6 +170,11 @@ public class DatabaseManager {
 		}
 	}
 
+	/**
+	 * Fills an Area with it's action stored in the database
+	 * @param area
+	 * @param areaId
+	 */
 	private void retrieveAreaAction(Area area, int areaId) {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -167,7 +187,11 @@ public class DatabaseManager {
 			pstmt.setInt(1, areaId);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
-				// TODO
+				action = ApiUtils.createActionFromName(rs.getString("name"));
+				if (action == null)
+					return;
+				action.setConfig(new JSONObject(rs.getString("config")));
+				action.setPreviousDatas(new JSONObject(rs.getString("previous_state")));
 			}
 		} catch (SQLException e) {
 			System.out.println("SQLException: " + e.getMessage());
@@ -187,6 +211,11 @@ public class DatabaseManager {
 		}
 	}
 
+	/**
+	 * Fills an Area with it's reaction
+	 * @param area
+	 * @param areaId
+	 */
 	private void retrieveAreaReaction(Area area, int areaId) {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -199,7 +228,10 @@ public class DatabaseManager {
 			pstmt.setInt(1, areaId);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
-				// TODO
+				reaction = ApiUtils.createReactionFromName(rs.getString("name"));
+				if (reaction == null)
+					return;
+				reaction.setConfig(new JSONObject(rs.getString("config")));
 			}
 		} catch (SQLException e) {
 			System.out.println("SQLException: " + e.getMessage());
