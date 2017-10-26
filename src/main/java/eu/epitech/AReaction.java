@@ -76,7 +76,26 @@ public abstract class AReaction implements IReaction {
 
 	@Override
 	public void removeFromDatabase(DatabaseManager dbm, Area area) {
-        // TODO
+		PreparedStatement pstmt = null;
+		int reactionId = -1;
+		
+		try {
+			if ((reactionId = this.getDbId(dbm, area)) == -1)
+				return;
+			pstmt = dbm.getConnection().prepareStatement("DELETE FROM reaction WHERE id = ?");
+			pstmt.setInt(1, reactionId);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("SQLException: " + e.getMessage());
+			System.out.println("SQLState: " + e.getSQLState());
+			System.out.println("VendorError: " + e.getErrorCode());
+		} finally { // Close statements before returning.
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException ignored) { }
+			}
+		}
     }
 
 	@Override

@@ -26,7 +26,7 @@ public class User {
 	 */
 	public void  addToDatabase(DatabaseManager dbm) {
 		PreparedStatement pstmt = null;
-		int userId = -1;
+		int userId;
 
 		try {
 			userId = this.getDbId(dbm);
@@ -56,8 +56,8 @@ public class User {
 	public void addTokenToDatabase(DatabaseManager dbm, ApiUtils.Name apiName, String token) {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		int userId = -1;
-		int logId = -1;
+		int userId;
+		int logId;
 
 		try {
 			userId = this.getDbId(dbm);

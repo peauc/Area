@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Area {
-	private String name;
+	private String name = null;
     private AAction action = null;
     private AReaction reaction = null;
     private User userRef = null;
@@ -28,10 +28,12 @@ public class Area {
 	public void addToDatabase(DatabaseManager dbm) {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		int userId = -1;
+		int userId;
 		String newName = null;
 
 		try {
+			if (this.name == null || this.action == null || this.reaction == null)
+				return;
 			userId = this.userRef.getDbId(dbm);
 			if (userId != -1) { // user exists in the database
 				for (int i = 0; newName == null; i++) { // while an area with the same name and fk_area_user is found, increments the area's name
@@ -49,10 +51,8 @@ public class Area {
 				pstmt.setInt(1, userId);
 				pstmt.setString(2, this.name);
 				pstmt.executeUpdate();
-				if (this.action != null && this.reaction != null) {
-					this.action.addToDatabase(dbm, this);
-					this.reaction.addToDatabase(dbm, this);
-				}
+				this.action.addToDatabase(dbm, this);
+				this.reaction.addToDatabase(dbm, this);
 			}
 		} catch (SQLException e) {
 			System.out.println("SQLException: " + e.getMessage());
@@ -72,8 +72,34 @@ public class Area {
 		}
 	}
 
-	public void removeFromDatabase(DatabaseManager dbm, User user) {
-		// TODO
+	/*
+	*** Removes an area from the database, will also remove it's action and reaction.
+	 */
+	public void removeFromDatabase(DatabaseManager dbm) {
+		PreparedStatement pstmt = null;
+		int areaId;
+
+		try {
+			if (this.action != null && this.reaction != null) {
+				this.action.removeFromDatabase(dbm, this);
+				this.reaction.removeFromDatabase(dbm, this);
+			}
+			if ((areaId = this.getDbId(dbm)) == -1)
+				return;
+			pstmt = dbm.getConnection().prepareStatement("DELETE FROM area WHERE id = ?");
+			pstmt.setInt(1, areaId);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("SQLException: " + e.getMessage());
+			System.out.println("SQLState: " + e.getSQLState());
+			System.out.println("VendorError: " + e.getErrorCode());
+		} finally { // Close statements before returning.
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException ignored) { }
+			}
+		}
 	}
 
 	public int getDbId(DatabaseManager dbm, int userId) {
@@ -111,5 +137,31 @@ public class Area {
 
 	public int getDbId(DatabaseManager dbm) {
 		return (this.getDbId(dbm, this.userRef.getDbId(dbm)));
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName() {
+		if (this.name == null) {
+			this.name = action.getName() + "_to_" + reaction.getName();
+		}
+	}
+
+	public AAction getAction() {
+		return action;
+	}
+
+	public void setAction(AAction action) {
+		this.action = action;
+	}
+
+	public AReaction getReaction() {
+		return reaction;
+	}
+
+	public void setReaction(AReaction reaction) {
+		this.reaction = reaction;
 	}
 }

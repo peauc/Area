@@ -43,8 +43,8 @@ public abstract class AAction implements IAction {
 	@Override
 	public void addToDatabase(DatabaseManager dbm, Area area) {
 		PreparedStatement pstmt = null;
-		int areaId = -1;
-		int actionId = -1;
+		int areaId;
+		int actionId;
 
 		try {
 			areaId = area.getDbId(dbm);
@@ -80,7 +80,26 @@ public abstract class AAction implements IAction {
 
 	@Override
 	public void removeFromDatabase(DatabaseManager dbm, Area area) {
-    	// TODO
+		PreparedStatement pstmt = null;
+		int actionId;
+
+		try {
+			if ((actionId = this.getDbId(dbm, area)) == -1)
+				return;
+			pstmt = dbm.getConnection().prepareStatement("DELETE FROM action WHERE id = ?");
+			pstmt.setInt(1, actionId);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("SQLException: " + e.getMessage());
+			System.out.println("SQLState: " + e.getSQLState());
+			System.out.println("VendorError: " + e.getErrorCode());
+		} finally { // Close statements before returning.
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException ignored) { }
+			}
+		}
 	}
 
 	@Override
