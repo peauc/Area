@@ -1,20 +1,12 @@
 package eu.epitech;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.scribejava.apis.*;
+import com.github.scribejava.core.model.OAuth1AccessToken;
+import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.github.scribejava.core.model.Token;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.NativeButton;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.addon.oauthpopup.OAuthListener;
 import org.vaadin.addon.oauthpopup.OAuthPopupButton;
@@ -22,65 +14,73 @@ import org.vaadin.addon.oauthpopup.OAuthPopupOpener;
 import org.vaadin.addon.oauthpopup.buttons.*;
 
 import java.io.IOException;
-import java.util.Objects;
 
 public class DemoLayout extends VerticalLayout {
 
 	private static final long serialVersionUID = -5419208604938947038L;
+	public static String facebookTokenID = null;
 
 	public DemoLayout() {
 		setSpacing(true);
 
 		addLinkedInButton();
-		addGitHubButton();
-		addGoogleButton();
-		addTwitterButtons();
 		addFacebookButtons();
 	}
 
 	private void addFacebookButtons() {
 		ApiInfo api = new ApiInfo(
 				"Facebook",
-				FacebookApi.instance(),
-				"134598150528779",
+                FacebookApi.instance(),
+                "134598150528779",
 				"6576b5e775d9f95f081ad635674a5d47",
 				"https://graph.facebook.com/v2.10/me?fields=id,name");
 		OAuthPopupButton button = new FacebookButton(api.apiKey, api.apiSecret);
-		addButton(api, button);
-		OAuthPopupOpener opener = new OAuthPopupOpener(FacebookApi.instance(), api.apiKey, api.apiSecret);
-		opener.addOAuthListener(new OAuthListener() {
+		System.out.println("FacebookLogin");
+        OAuthListener toto = new OAuthListener() {
+		    @Override
+			public void authSuccessful(Token token, boolean b) {
+                System.out.println("token");
+                Facebook.setToken(token);
+                Facebook.setApiInfo(api);
+                Facebook.setoAuthService(Facebook.createOAuthService());
+                try {
+                    String t = Facebook.sendGet(Facebook.getApiInfo().exampleGetRequest);
+                    System.out.println(t);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 			@Override
-			public void authSuccessful(Token token, boolean isOAuth20) {
-				Notification.show("authSuccessful");
+			public void authDenied(String s) {
+				System.out.println("No token");
+				Notification.show("authDenied" + s, Notification.Type.ERROR_MESSAGE);
 			}
-			@Override
-			public void authDenied(String reason) {
-				Notification.show("authDenied");
-			}
-		});
-	}
+		};
+        addComponent(button);
+        button.addOAuthListener(toto);
+    }
 
-	private void addTwitterButtons() {
-		ApiInfo api = readClientSecrets("/client_secret.twitter.json",
-				"Twitter",
-				TwitterApi.instance(),
-				"https://api.twitter.com/1.1/account/settings.json");
-		OAuthPopupButton button = new TwitterButton(api.apiKey, api.apiSecret);
-		addButton(api, button);
-
-		OAuthPopupOpener opener = new OAuthPopupOpener(TwitterApi.instance(), api.apiKey, api.apiSecret);
-		opener.addOAuthListener(new OAuthListener() {
-			@Override
-			public void authSuccessful(Token token, boolean isOAuth20) {
-				Notification.show("authSuccessful");
-			}
-
-			@Override
-			public void authDenied(String reason) {
-				Notification.show("authDenied");
-			}
-		});
-	}
+//	private void addTwitterButtons() {
+//		ApiInfo api = readClientSecrets("/client_secret.twitter.json",
+//				"Twitter",
+//				TwitterApi.instance(),
+//				"https://api.twitter.com/1.1/account/settings.json");
+//		OAuthPopupButton button = new TwitterButton(api.apiKey, api.apiSecret);
+//		addButton(api, button);
+//
+//		OAuthPopupOpener opener = new OAuthPopupOpener(TwitterApi.instance(), api.apiKey, api.apiSecret);
+//		opener.addOAuthListener(new OAuthListener() {
+//			@Override
+//			public void authSuccessful(Token token, boolean isOAuth20) {
+//				Notification.show("authSuccessful");
+//			}
+//
+//			@Override
+//			public void authDenied(String reason) {
+//				Notification.show("authDenied");
+//			}
+//		});
+//	}
 
 	private void addLinkedInButton() {
 		ApiInfo api = new ApiInfo(
@@ -93,48 +93,29 @@ public class DemoLayout extends VerticalLayout {
 		addButton(api, button);
 	}
 
-	private void addGitHubButton() {
-		ApiInfo api = readClientSecrets("/client_secret.github.json",
-				"GitHub",
-				GitHubApi.instance(),
-				"https://api.github.com/user");
-		if (api == null) return;
-		OAuthPopupButton button = new GitHubButton(api.apiKey, api.apiSecret);
-		addButton(api, button);
-	}
+//	private void addGitHubButton() {
+//		ApiInfo api = readClientSecrets("/client_secret.github.json",
+//				"GitHub",
+//				GitHubApi.instance(),
+//				"https://api.github.com/user");
+//		if (api == null) return;
+//		OAuthPopupButton button = new GitHubButton(api.apiKey, api.apiSecret);
+//		addButton(api, button);
+//	}
 
-	private void addGoogleButton() {
-		ApiInfo api = readClientSecrets("/client_secret.google.json",
-				"Google",
-				GoogleApi20.instance(),
-				"https://www.googleapis.com/plus/v1/people/me");
-		/*api = new ApiInfo("Google", GoogleApi20.instance(),
-				"127486145149-q8or6g21t7hok8ngj83re7b1l06u22ff.apps.googleusercontent.com",
-				"Oth69gnVeJOevAoGbYRIxygA",
-				"https://www.googleapis.com/plus/v1/people/me");*/
-		if (api == null) return;
-		OAuthPopupButton button = new GoogleButton(api.apiKey, api.apiSecret, "https://www.googleapis.com/auth/plus.login");
-		addButton(api, button);
-	}
-
-	// Client secrets are stored in a JSON file on the classpath in the following format:
-	// { "client_id": "my client id", "client_secret": "my client secret" }
-	private ApiInfo readClientSecrets(String resourcePath, String name, Object scribeApi, String getEndpoint) {
-		ApiInfo api = null;
-		System.out.println("reousrcePath = " + resourcePath);
-		if (Objects.equals(name, "Twitter")) {
-			System.out.println("getClass");
-				//JsonNode web = new ObjectMapper().readTree(getClass().getResourceAsStream(resourcePath));
-				//if (1 != null)
-				{
-					api = new ApiInfo(name, scribeApi,
-							"42AriIXIIgxEFeU9YHTrmdR85",
-						"wITToqSU0GOM5u5xeNv7GXbFmffdSDqgZrvtH4Hrr6Hftjtu4M",
-						getEndpoint);
-			}
-		}
-		return api;
-	}
+//	private void addGoogleButton() {
+//		ApiInfo api = readClientSecrets("/client_secret.google.json",
+//				"Google",
+//				GoogleApi20.instance(),
+//				"https://www.googleapis.com/plus/v1/people/me");
+//		/*api = new ApiInfo("Google", GoogleApi20.instance(),
+//				"127486145149-q8or6g21t7hok8ngj83re7b1l06u22ff.apps.googleusercontent.com",
+//				"Oth69gnVeJOevAoGbYRIxygA",
+//				"https://www.googleapis.com/plus/v1/people/me");*/
+//		if (api == null) return;
+//		OAuthPopupButton button = new GoogleButton(api.apiKey, api.apiSecret, "https://www.googleapis.com/auth/plus.login");
+//		addButton(api, button);
+//	}
 
 	private void addButton(final ApiInfo service, OAuthPopupButton button) {
 
