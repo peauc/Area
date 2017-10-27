@@ -1,5 +1,11 @@
-package eu.epitech;
+package eu.epitech.reaction;
 
+import elemental.json.Json;
+import eu.epitech.API.ApiUtils;
+import eu.epitech.Area;
+import eu.epitech.DatabaseManager;
+import eu.epitech.FieldType;
+import eu.epitech.Tokene;
 import org.json.JSONObject;
 
 import java.sql.PreparedStatement;
@@ -11,6 +17,7 @@ import java.util.Map;
 public abstract class AReaction implements IReaction {
 	protected ApiUtils.Name api;
     protected String name;
+
     protected String description;
     protected JSONObject config = null;
 	protected List<String> requiredActionFields = null;
@@ -95,7 +102,7 @@ public abstract class AReaction implements IReaction {
 	public void removeFromDatabase(DatabaseManager dbm, Area area) {
 		PreparedStatement pstmt = null;
 		int reactionId = -1;
-		
+
 		try {
 			if ((reactionId = this.getDbId(dbm, area)) == -1)
 				return;

@@ -15,12 +15,12 @@ import com.github.scribejava.core.oauth.OAuth10aService;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import com.github.scribejava.core.oauth.OAuthService;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import eu.epitech.API.ApiInfo;
 
 @SuppressWarnings("serial")
 class GetTestComponent extends Panel {

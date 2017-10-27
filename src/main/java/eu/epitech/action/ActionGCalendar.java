@@ -1,5 +1,5 @@
 
-package eu.epitech;
+package eu.epitech.action;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -19,6 +19,7 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import eu.epitech.FieldType;
 import org.json.JSONObject;
 import org.pmw.tinylog.Logger;
 

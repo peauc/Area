@@ -1,7 +1,13 @@
-package eu.epitech;
+package eu.epitech.action;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import eu.epitech.API.ApiUtils;
+import eu.epitech.Area;
+import eu.epitech.DatabaseManager;
+import eu.epitech.FieldType;
 import org.json.JSONObject;
 
+import javax.swing.text.StyledEditorKit;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
