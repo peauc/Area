@@ -20,22 +20,6 @@ public abstract class AReaction implements IReaction {
 
 	}
 
-	/**
-	 * Every reaction must call this contructor.
-	 * @param apiName
-	 * @param reactionName
-	 * @param description
-	 * @param requiredActionFields
-	 * @param requiredConfigFields
-	 */
-	public AReaction(ApiUtils.Name apiName, String reactionName, String description, List<String> requiredActionFields, Map<String, FieldType> requiredConfigFields) {
-		this.api = apiName;
-		this.name = reactionName;
-		this.description = description;
-		this.requiredActionFields = requiredActionFields;
-		this.requiredConfigFields = requiredConfigFields;
-	}
-
 	public ApiUtils.Name getApi() {
 		return api;
 	}

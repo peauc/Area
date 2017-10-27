@@ -18,22 +18,7 @@ public abstract class AAction implements IAction {
     protected Map<String, FieldType> requiredConfigFields = null;
 
     public AAction() {
-	}
 
-	/**
-	 * Every action must call this constructor.
-	 * @param apiName
-	 * @param actionName
-	 * @param description
-	 * @param returnedFields
-	 * @param requiredConfigFields
-	 */
-    public AAction(ApiUtils.Name apiName, String actionName, String description, List<String> returnedFields, Map<String, FieldType> requiredConfigFields) {
-    	this.api = apiName;
-    	this.name = actionName;
-    	this.description = description;
-    	this.fields = returnedFields;
-    	this.requiredConfigFields = requiredConfigFields;
 	}
 
 	public ApiUtils.Name getApi() {

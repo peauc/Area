@@ -3,9 +3,6 @@ package eu.epitech;
 import java.util.HashMap;
 import java.util.Map;
 
-/*
-*** Static constant class providing a way to identify a token based on an enum's value as well as a string.
- */
 public class ApiUtils {
 
 	public enum Name {
@@ -23,11 +20,11 @@ public class ApiUtils {
 	}};
 
 	public static final Map<String, String> corrTableActionName = new HashMap<String, String>() {{
-		put("", "");
+		put("FACEBOOK : On friend request", "ActionExample");
 	}};
 
 	public static final Map<String, String> corrTableReactionName = new HashMap<String, String>() {{
-		put("", "");
+		put("TWITTER : Send private message", "ReactionExample");
 	}};
 
 	public static AAction createActionFromName(String name) {
