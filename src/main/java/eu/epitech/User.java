@@ -22,21 +22,18 @@ public class User {
 		this.areas = new ArrayList<>();
 	}
 
-	/*
-	*** Add the user to database.
-	*** Will not update anything if the user is already present.
+	/**
+	 * Adds the user to the database
+	 * Will not update anything if the user is already present
+	 * @param dbm
 	 */
 	public void  addToDatabase(DatabaseManager dbm) {
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
+		int userId;
 
 		try {
-			pstmt = dbm.getConnection().prepareStatement("SELECT id FROM user WHERE name LIKE ?");
-			pstmt.setString(1, this.name);
-			rs = pstmt.executeQuery();
-			if (!rs.first()) { // Add the user to database if he's not already present.
-				rs.close();
-				pstmt.close();
+			userId = this.getDbId(dbm);
+			if (userId == -1) { // Add the user to database if he's not already present.
 				pstmt = dbm.getConnection().prepareStatement("INSERT INTO user(name, password) VALUES (?, ?)");
 				pstmt.setString(1, this.name);
 				pstmt.setString(2, this.password);
@@ -46,12 +43,7 @@ public class User {
 			System.out.println("SQLException: " + e.getMessage());
 			System.out.println("SQLState: " + e.getSQLState());
 			System.out.println("VendorError: " + e.getErrorCode());
-		} finally { // Close statements and results before returning.
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException ignored) { }
-			}
+		} finally { // Close statements before returning.
 			if (pstmt != null) {
 				try {
 					pstmt.close();
@@ -60,32 +52,30 @@ public class User {
 		}
 	}
 
-	/*
-	*** Add a token to the database.
-	*** Will update a token's value if it finds one already belonging to the user.
+	/**
+	 * Adds a token to the database
+	 * Will update a token's value if it finds one belonging to the user
+	 * @param dbm
+	 * @param apiName
+	 * @param token
 	 */
 	public void addTokenToDatabase(DatabaseManager dbm, ApiUtils.Name apiName, String token) {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		int clientId;
+		int userId;
 		int logId;
 
 		try {
-			pstmt = dbm.getConnection().prepareStatement("SELECT id FROM user WHERE name LIKE ?");
-			pstmt.setString(1, this.name);
-			rs = pstmt.executeQuery();
-			if (rs.next()) {
-				clientId = rs.getInt("id");
-				rs.close();
-				pstmt.close();
+			userId = this.getDbId(dbm);
+			if (userId != -1) { // user exists in the database
 				pstmt = dbm.getConnection().prepareStatement("SELECT id FROM token WHERE fk_token_user = ? AND api_name LIKE ?");
-				pstmt.setInt(1, clientId);
+				pstmt.setInt(1, userId);
 				pstmt.setString(2, apiName.name());
 				rs = pstmt.executeQuery();
 				if (!rs.next()) { // no token found -> add one
 					pstmt.close();
 					pstmt = dbm.getConnection().prepareStatement("INSERT INTO token(fk_token_user, api_name, value) VALUES (?, ?, ?)");
-					pstmt.setInt(1, clientId);
+					pstmt.setInt(1, userId);
 					pstmt.setString(2, apiName.name());
 					pstmt.setString(3, token);
 					pstmt.executeUpdate();
@@ -135,6 +125,37 @@ public class User {
 			}
 			this.idTokens.put(api, token);
 		}
+	}
+
+	public int getDbId(DatabaseManager dbm) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int userId = -1;
+
+		try {
+			pstmt = dbm.getConnection().prepareStatement("SELECT id FROM user WHERE name LIKE ?");
+			pstmt.setString(1, this.name);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				userId = rs.getInt("id");
+			}
+		} catch (SQLException e) {
+			System.out.println("SQLException: " + e.getMessage());
+			System.out.println("SQLState: " + e.getSQLState());
+			System.out.println("VendorError: " + e.getErrorCode());
+		} finally { // Close statements and results before returning.
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException ignored) { }
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException ignored) { }
+			}
+		}
+		return (userId);
 	}
 
 	public void removeIdToken(ApiUtils.Name api) {
