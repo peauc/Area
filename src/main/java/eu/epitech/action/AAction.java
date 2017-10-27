@@ -1,6 +1,9 @@
 package eu.epitech.action;
 
 import com.sun.org.apache.xpath.internal.operations.Bool;
+import eu.epitech.API.ApiUtils;
+import eu.epitech.Area;
+import eu.epitech.DatabaseManager;
 import eu.epitech.FieldType;
 import org.json.JSONObject;
 

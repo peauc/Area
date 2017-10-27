@@ -1,6 +1,9 @@
 package eu.epitech.action;
 
 import com.google.common.collect.ImmutableList;
+import eu.epitech.API.ApiUtils;
+import eu.epitech.Area;
+import eu.epitech.DatabaseManager;
 import eu.epitech.FieldType;
 import org.json.JSONObject;
 
@@ -9,6 +12,15 @@ import java.util.Map;
 
 public class ActionNewTweet extends AAction {
     List<String> params = ImmutableList.of();
+
+    public ActionNewTweet() {
+        super();
+    }
+
+    @Override
+    public ApiUtils.Name getApi() {
+        return super.getApi();
+    }
 
     @Override
     public JSONObject getConfig() {
@@ -36,6 +48,36 @@ public class ActionNewTweet extends AAction {
     }
 
     @Override
+    public JSONObject getPreviousDatas() {
+        return super.getPreviousDatas();
+    }
+
+    @Override
+    public void setPreviousDatas(JSONObject previousDatas) {
+        super.setPreviousDatas(previousDatas);
+    }
+
+    @Override
+    public void addToDatabase(DatabaseManager dbm, Area area) {
+        super.addToDatabase(dbm, area);
+    }
+
+    @Override
+    public void removeFromDatabase(DatabaseManager dbm, Area area) {
+        super.removeFromDatabase(dbm, area);
+    }
+
+    @Override
+    public int getDbId(DatabaseManager dbm, int areaId) {
+        return super.getDbId(dbm, areaId);
+    }
+
+    @Override
+    public int getDbId(DatabaseManager dbm, Area area) {
+        return super.getDbId(dbm, area);
+    }
+
+    @Override
     public boolean hasHappened() {
         return false;
     }
@@ -56,7 +98,7 @@ public class ActionNewTweet extends AAction {
     }
 
     @Override
-    public boolean setConfiguration(JSONObject conf) {
-        return super.setConfiguration(conf);
+    public boolean setConfig(JSONObject conf) {
+        return super.setConfig(conf);
     }
 }

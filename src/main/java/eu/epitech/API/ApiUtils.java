@@ -1,5 +1,8 @@
 package eu.epitech.API;
 
+import eu.epitech.action.AAction;
+import eu.epitech.reaction.AReaction;
+
 import java.util.HashMap;
 import java.util.Map;
 

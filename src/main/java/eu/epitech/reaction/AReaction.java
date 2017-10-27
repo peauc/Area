@@ -1,6 +1,10 @@
 package eu.epitech.reaction;
 
 import elemental.json.Json;
+import eu.epitech.API.ApiUtils;
+import eu.epitech.Area;
+import eu.epitech.DatabaseManager;
+import eu.epitech.FieldType;
 import eu.epitech.Tokene;
 import org.json.JSONObject;
 

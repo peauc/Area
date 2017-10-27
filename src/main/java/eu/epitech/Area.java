@@ -1,5 +1,8 @@
 package eu.epitech;
 
+import eu.epitech.action.AAction;
+import eu.epitech.reaction.AReaction;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
