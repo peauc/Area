@@ -31,21 +31,23 @@ public class MainJob implements Job {
 					System.out.println("    Api : " + entry.getKey().name() + "; Token : " + entry.getValue());
 				}
 				for (Area area : user.getAreas()) {
-					System.out.println("    Name : " + area.getName());
-					System.out.println("    Action :");
-					System.out.println("        Api : " + area.getAction().getApi().name());
-					System.out.println("        Name : " + area.getAction().getName());
-					System.out.println("        Description : " + area.getAction().getDescription());
-					System.out.println("    Reaction :");
-					System.out.println("        Api : " + area.getReaction().getApi().name());
-					System.out.println("        Name : " + area.getReaction().getName());
-					System.out.println("        Description : " + area.getReaction().getDescription());
+					if (area.getAction() != null && area.getReaction() != null) {
+						System.out.println("    Name : " + area.getName());
+						System.out.println("    Action :");
+						System.out.println("        Api : " + area.getAction().getApi().name());
+						System.out.println("        Name : " + area.getAction().getName());
+						System.out.println("        Description : " + area.getAction().getDescription());
+						System.out.println("    Reaction :");
+						System.out.println("        Api : " + area.getReaction().getApi().name());
+						System.out.println("        Name : " + area.getReaction().getName());
+						System.out.println("        Description : " + area.getReaction().getDescription());
 
-					if (area.getAction().hasHappened()) { // Checks if action has been triggered
-						List<JSONObject> events = area.getAction().whatHappened();
-						if (events != null) {
-							for (JSONObject event : events) {
-								area.getReaction().execute(user.getIdToken(area.getReaction().getApi()), event);
+						if (area.getAction().hasHappened()) { // Checks if action has been triggered
+							List<JSONObject> events = area.getAction().whatHappened();
+							if (events != null) {
+								for (JSONObject event : events) {
+									area.getReaction().execute(user.getIdToken(area.getReaction().getApi()), event);
+								}
 							}
 						}
 					}
