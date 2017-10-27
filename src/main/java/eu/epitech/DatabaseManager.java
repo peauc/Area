@@ -1,5 +1,7 @@
 package eu.epitech;
 
+import eu.epitech.API.ApiUtils;
+
 import java.sql.*;
 import java.util.Objects;
 

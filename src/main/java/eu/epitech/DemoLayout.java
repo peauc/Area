@@ -1,16 +1,16 @@
 package eu.epitech;
 
 import com.github.scribejava.apis.*;
-import com.github.scribejava.core.model.OAuth1AccessToken;
-import com.github.scribejava.core.model.OAuth2AccessToken;
-import com.github.scribejava.core.model.Token;
+import com.github.scribejava.core.model.*;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
+import eu.epitech.API.ApiInfo;
+import eu.epitech.API.Twitter;
+import eu.epitech.API.Facebook;
 import org.vaadin.addon.oauthpopup.OAuthListener;
 import org.vaadin.addon.oauthpopup.OAuthPopupButton;
-import org.vaadin.addon.oauthpopup.OAuthPopupOpener;
 import org.vaadin.addon.oauthpopup.buttons.*;
 
 import java.io.IOException;
@@ -23,8 +23,7 @@ public class DemoLayout extends VerticalLayout {
 	public DemoLayout() {
 		setSpacing(true);
 
-		addLinkedInButton();
-		addFacebookButtons();
+		addTwitterButtons();
 	}
 
 	private void addFacebookButtons() {
@@ -33,10 +32,10 @@ public class DemoLayout extends VerticalLayout {
                 FacebookApi.instance(),
                 "134598150528779",
 				"6576b5e775d9f95f081ad635674a5d47",
-				"https://graph.facebook.com/v2.10/me?fields=id,name");
+				"https://graph.facebook.com/v2.10/me");
 		OAuthPopupButton button = new FacebookButton(api.apiKey, api.apiSecret);
 		System.out.println("FacebookLogin");
-        OAuthListener toto = new OAuthListener() {
+		OAuthListener toto = new OAuthListener() {
 		    @Override
 			public void authSuccessful(Token token, boolean b) {
                 System.out.println("token");
@@ -44,7 +43,8 @@ public class DemoLayout extends VerticalLayout {
                 Facebook.setApiInfo(api);
                 Facebook.setoAuthService(Facebook.createOAuthService());
                 try {
-                    String t = Facebook.sendGet(Facebook.getApiInfo().exampleGetRequest);
+                    String t = Facebook.send(Facebook.getApiInfo().exampleGetRequest + "/feed?message=ceciestuntest", Verb.POST);
+
                     System.out.println(t);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -60,27 +60,30 @@ public class DemoLayout extends VerticalLayout {
         button.addOAuthListener(toto);
     }
 
-//	private void addTwitterButtons() {
-//		ApiInfo api = readClientSecrets("/client_secret.twitter.json",
-//				"Twitter",
-//				TwitterApi.instance(),
-//				"https://api.twitter.com/1.1/account/settings.json");
-//		OAuthPopupButton button = new TwitterButton(api.apiKey, api.apiSecret);
-//		addButton(api, button);
-//
-//		OAuthPopupOpener opener = new OAuthPopupOpener(TwitterApi.instance(), api.apiKey, api.apiSecret);
-//		opener.addOAuthListener(new OAuthListener() {
-//			@Override
-//			public void authSuccessful(Token token, boolean isOAuth20) {
-//				Notification.show("authSuccessful");
-//			}
-//
-//			@Override
-//			public void authDenied(String reason) {
-//				Notification.show("authDenied");
-//			}
-//		});
-//	}
+	private void addTwitterButtons() {
+		ApiInfo api = new ApiInfo("Twitter", TwitterApi.instance(),
+				"42AriIXIIgxEFeU9YHTrmdR85",
+				"wITToqSU0GOM5u5xeNv7GXbFmffdSDqgZrvtH4Hrr6Hftjtu4M",
+				"https://api.twitter.com/1.1/statuses/lookup");
+		OAuthPopupButton button = new TwitterButton(api.apiKey, api.apiSecret);
+		addComponent(button);
+		 addButton(api, button);
+		button.addOAuthListener(new OAuthListener() {
+			@Override
+			public void authSuccessful(Token token, boolean isOAuth20) {
+				Notification.show("authSuccessful");
+				Twitter.setToken(token);
+				Twitter.setApiInfo(api);
+				Twitter.setoAuthService(Twitter.createOAuthService());
+				Twitter.setIsLoged(true);
+			}
+
+			@Override
+			public void authDenied(String reason) {
+				Notification.show("authDenied");
+			}
+		});
+	}
 
 	private void addLinkedInButton() {
 		ApiInfo api = new ApiInfo(
@@ -88,7 +91,7 @@ public class DemoLayout extends VerticalLayout {
 				LinkedInApi.instance(),
 				"86sylwa1zpw1su",
 				"87IrVYtvU5t2q4fd",
-				"https://api.linkedin.com/v1/people/~?format=json");
+				"https://api.linkedin.com/v1/people/?format=json?id=20");
 		OAuthPopupButton button = new LinkedInButton(api.apiKey, api.apiSecret);
 		addButton(api, button);
 	}

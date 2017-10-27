@@ -1,6 +1,7 @@
-package eu.epitech;
+package eu.epitech.reaction;
 
 import elemental.json.Json;
+import eu.epitech.Tokene;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public abstract class AReaction implements IReaction {
     }
 
     @Override
-    public abstract void execute(Token token, Json actionOutput);
+    public abstract void execute(Tokene token, Json actionOutput);
 
     @Override
     public abstract boolean isExecutable(List<String> fields);

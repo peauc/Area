@@ -1,11 +1,10 @@
-package eu.epitech;
+package eu.epitech.action;
 
-import com.google.common.collect.ImmutableMap;
-import elemental.json.Json;
-import javafx.util.Pair;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import eu.epitech.FieldType;
 import org.json.JSONObject;
 
-import java.util.Collections;
+import javax.swing.text.StyledEditorKit;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +14,6 @@ public abstract class AAction implements IAction {
     static protected List<String> fields;
     protected JSONObject configuration = null;
     static private Map<String, FieldType> requiredConfigFields = null;
-
 
     public JSONObject getConfig() {
         return configuration;

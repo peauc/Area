@@ -1,4 +1,4 @@
-package eu.epitech;
+package eu.epitech.API;
 
 import java.util.HashMap;
 import java.util.Map;
