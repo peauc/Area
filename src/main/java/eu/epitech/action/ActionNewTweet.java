@@ -1,17 +1,23 @@
 package eu.epitech.action;
 
+import com.github.scribejava.core.model.Verb;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.common.collect.ImmutableList;
 import eu.epitech.API.ApiUtils;
+import eu.epitech.API.Twitter;
 import eu.epitech.Area;
 import eu.epitech.DatabaseManager;
 import eu.epitech.FieldType;
+import jdk.nashorn.internal.parser.JSONParser;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 public class ActionNewTweet extends AAction {
-    List<String> params = ImmutableList.of();
+    private static final JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
     public ActionNewTweet() {
         super();
@@ -79,6 +85,13 @@ public class ActionNewTweet extends AAction {
 
     @Override
     public boolean hasHappened() {
+        if (previousDatas == null) {
+            try {
+                initialize();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         return false;
     }
 
@@ -101,4 +114,18 @@ public class ActionNewTweet extends AAction {
     public boolean setConfig(JSONObject conf) {
         return super.setConfig(conf);
     }
+
+    private JSONObject initialize() throws IOException {
+        String tmp = Twitter.send("https://api.twitter.com/1.1/statuses/mentions_timeline.json?count=1", Verb.GET);
+        if (tmp == null)
+            return null;
+        JSONObject response = new JSONObject(tmp);
+        if (response.isNull("text")) {
+            return null;
+        }
+        previousDatas = response;
+
+        return (response);
+    }
+    List<String> params = ImmutableList.of("text", "id");
 }

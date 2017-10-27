@@ -7,6 +7,7 @@ import com.github.scribejava.core.model.*;
 import com.github.scribejava.core.oauth.OAuth10aService;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import com.github.scribejava.core.oauth.OAuthService;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.time.Instant;
