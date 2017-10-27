@@ -44,3 +44,4 @@ public class ActionExample extends AAction {
 		return this.fields;
 	}
 }
+
