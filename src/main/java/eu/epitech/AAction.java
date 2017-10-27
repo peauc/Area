@@ -17,7 +17,7 @@ public abstract class AAction implements IAction {
 	protected List<String> fields;
     protected Map<String, FieldType> requiredConfigFields = null;
 
-    private AAction() {
+    public AAction() {
 	}
 
 	/**

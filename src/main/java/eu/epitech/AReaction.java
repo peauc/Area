@@ -16,6 +16,10 @@ public abstract class AReaction implements IReaction {
 	protected List<String> requiredActionFields = null;
 	protected Map<String, FieldType> requiredConfigFields = null;
 
+	public AReaction() {
+
+	}
+
 	/**
 	 * Every reaction must call this contructor.
 	 * @param apiName
