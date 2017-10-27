@@ -59,6 +59,18 @@ public abstract class AAction implements IAction {
 		this.previousDatas = previousDatas;
 	}
 
+    @Override
+    public abstract boolean hasHappened();
+
+    @Override
+    public abstract List<JSONObject> whatHappened();
+
+    @Override
+    public abstract Map<String, FieldType> configFields();
+
+    @Override
+    public abstract List<String> returnedFields();
+
 	/**
 	 * Adds the action to the database or update it if one is already present.
 	 * @param dbm
@@ -172,18 +184,6 @@ public abstract class AAction implements IAction {
 	public int getDbId(DatabaseManager dbm, Area area) {
 		return this.getDbId(dbm, area.getDbId(dbm));
 	}
-
-    @Override
-    public abstract boolean hasHappened();
-
-    @Override
-    public abstract List<JSONObject> whatHappened();
-
-    @Override
-    public abstract Map<String, FieldType> configFields();
-
-    @Override
-    public abstract List<String> returnedFields();
 
     @Override
     public boolean setConfig(JSONObject conf) {
