@@ -7,6 +7,7 @@ import com.github.scribejava.core.model.*;
 import com.github.scribejava.core.oauth.OAuth10aService;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import com.github.scribejava.core.oauth.OAuthService;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -77,6 +78,7 @@ public abstract class AApi {
 
     public static String send(String URL, Verb mode) throws IOException {
         if (getoAuthService() == null || getToken() == null) {
+            System.out.println("send returning null");
             return null;
         }
         final OAuthRequest request = new OAuthRequest(mode, URL, getoAuthService());

@@ -7,6 +7,9 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
+import eu.epitech.DatabaseManager;
+import eu.epitech.NavigatorUI;
+import eu.epitech.User;
 
 import java.util.ArrayList;
 
@@ -24,6 +27,8 @@ import java.util.ArrayList;
 public class ActionView extends VerticalLayout implements View {
         private ArrayList<Button> actionsButton = new ArrayList<Button>();
         private int nbAction = 0;
+        private DatabaseManager dbm;
+        private User user;
 
         // Set in Action View the nbAction attribute by set it with the current nbAction we have
     public ActionView() {
@@ -39,7 +44,13 @@ public class ActionView extends VerticalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        Notification.show("Welcome to action page !");
+        try {
+            this.user = (User) NavigatorUI.readData(getUI());
+            this.dbm = (DatabaseManager) NavigatorUI.readData(getUI());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Notification.show("Welcome to action page !" + user.getName());
     }
 
     /*

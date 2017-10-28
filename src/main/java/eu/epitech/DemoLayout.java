@@ -9,6 +9,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import eu.epitech.API.ApiInfo;
 import eu.epitech.API.Twitter;
 import eu.epitech.API.Facebook;
+import eu.epitech.action.ActionNewTweet;
 import org.vaadin.addon.oauthpopup.OAuthListener;
 import org.vaadin.addon.oauthpopup.OAuthPopupButton;
 import org.vaadin.addon.oauthpopup.buttons.*;
@@ -21,8 +22,6 @@ public class DemoLayout extends VerticalLayout {
 	public static String facebookTokenID = null;
 
 	public DemoLayout() {
-		setSpacing(true);
-
 		addTwitterButtons();
 	}
 
@@ -66,16 +65,18 @@ public class DemoLayout extends VerticalLayout {
 				"wITToqSU0GOM5u5xeNv7GXbFmffdSDqgZrvtH4Hrr6Hftjtu4M",
 				"https://api.twitter.com/1.1/statuses/lookup");
 		OAuthPopupButton button = new TwitterButton(api.apiKey, api.apiSecret);
-		addComponent(button);
 		addButton(api, button);
 		button.addOAuthListener(new OAuthListener() {
 			@Override
-			public void authSuccessful(Token token, boolean isOAuth20) {
-				Notification.show("authSuccessful");
+			public void authSuccessful(Token token, boolean isOAuth20)
+			{
+							Notification.show("authSuccessful");
 				Twitter.setToken(token);
 				Twitter.setApiInfo(api);
 				Twitter.setoAuthService(Twitter.createOAuthService());
 				Twitter.setIsLoged(true);
+				ActionNewTweet actionNewTweet = new ActionNewTweet();
+				actionNewTweet.hasHappened();
 			}
 
 			@Override
