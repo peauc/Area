@@ -1,13 +1,11 @@
 package eu.epitech.action;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import eu.epitech.API.ApiUtils;
 import eu.epitech.Area;
 import eu.epitech.DatabaseManager;
 import eu.epitech.FieldType;
 import org.json.JSONObject;
 
-import javax.swing.text.StyledEditorKit;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -59,6 +57,18 @@ public abstract class AAction implements IAction {
 		this.previousDatas = previousDatas;
 	}
 
+    @Override
+    public abstract boolean hasHappened();
+
+    @Override
+    public abstract List<JSONObject> whatHappened();
+
+    @Override
+    public abstract Map<String, FieldType> configFields();
+
+    @Override
+    public abstract List<String> returnedFields();
+
 	/**
 	 * Adds the action to the database or update it if one is already present.
 	 * @param dbm
@@ -78,14 +88,14 @@ public abstract class AAction implements IAction {
 				pstmt = dbm.getConnection().prepareStatement("INSERT INTO action(fk_action_area, api_name, name, description, config, previous_state) VALUES (?, ?, ?, ?, ?, ?)");
 				pstmt.setInt(1, areaId);
 				pstmt.setString(2, this.api.name());
-				pstmt.setString(2, this.name);
-				pstmt.setString(3, this.description);
-				pstmt.setString(4, this.config.toString());
-				pstmt.setString(5, (this.previousDatas != null) ? this.previousDatas.toString() : null);
+				pstmt.setString(3, this.name);
+				pstmt.setString(4, this.description);
+				pstmt.setString(5, (this.config != null) ? this.config.toString() : null);
+				pstmt.setString(6, (this.previousDatas != null) ? this.previousDatas.toString() : null);
 				pstmt.executeUpdate();
 			} else { // action found -> update config and previous_state
 				pstmt = dbm.getConnection().prepareStatement("UPDATE action SET config = ?, previous_state = ? WHERE fk_action_area = ?");
-				pstmt.setString(1, this.config.toString());
+				pstmt.setString(1, (this.config != null) ? this.config.toString() : null);
 				pstmt.setString(2, (this.previousDatas != null) ? this.previousDatas.toString() : null);
 				pstmt.setInt(3, actionId);
 				pstmt.executeUpdate();
@@ -172,18 +182,6 @@ public abstract class AAction implements IAction {
 	public int getDbId(DatabaseManager dbm, Area area) {
 		return this.getDbId(dbm, area.getDbId(dbm));
 	}
-
-    @Override
-    public abstract boolean hasHappened();
-
-    @Override
-    public abstract List<JSONObject> whatHappened();
-
-    @Override
-    public abstract Map<String, FieldType> configFields();
-
-    @Override
-    public abstract List<String> returnedFields();
 
     @Override
     public boolean setConfig(JSONObject conf) {

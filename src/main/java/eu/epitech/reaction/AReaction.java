@@ -65,15 +65,16 @@ public abstract class AReaction implements IReaction {
 			if (areaId == -1) // area not found
 				return;
 			if ((reactionId = this.getDbId(dbm, area)) == -1) { // action not found -> create a new db entry
-				pstmt = dbm.getConnection().prepareStatement("INSERT INTO reaction(fk_reaction_area, name, description, config) VALUES (?, ?, ?, ?)");
+				pstmt = dbm.getConnection().prepareStatement("INSERT INTO reaction(fk_reaction_area, api_name, name, description, config) VALUES (?, ?, ?, ?, ?)");
 				pstmt.setInt(1, areaId);
-				pstmt.setString(2, this.name);
-				pstmt.setString(3, this.description);
-				pstmt.setString(4, this.config.toString());
+				pstmt.setString(2, this.api.name());
+				pstmt.setString(3, this.name);
+				pstmt.setString(4, this.description);
+				pstmt.setString(5, (this.config != null) ? this.config.toString() : null);
 				pstmt.executeUpdate();
 			} else { // action found -> update config
 				pstmt = dbm.getConnection().prepareStatement("UPDATE action SET config = ? WHERE fk_action_area = ?");
-				pstmt.setString(1, this.config.toString());
+				pstmt.setString(1, (this.config != null) ? this.config.toString() : null);
 				pstmt.setInt(2, reactionId);
 				pstmt.executeUpdate();
 			}

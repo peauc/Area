@@ -1,7 +1,7 @@
-package eu.epitech;
+package eu.epitech.reaction;
 
 import eu.epitech.API.ApiUtils;
-import eu.epitech.reaction.AReaction;
+import eu.epitech.FieldType;
 import org.json.JSONObject;
 
 import java.util.ArrayList;

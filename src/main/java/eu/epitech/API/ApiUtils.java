@@ -23,11 +23,11 @@ public class ApiUtils {
 	}};
 
 	public static final Map<String, String> corrTableActionName = new HashMap<String, String>() {{
-		put("FACEBOOK : On friend request", "ActionExample");
+		put("FACEBOOK : On friend request", "eu.epitech.action.ActionExample");
 	}};
 
 	public static final Map<String, String> corrTableReactionName = new HashMap<String, String>() {{
-		put("TWITTER : Send private message", "ReactionExample");
+		put("TWITTER : Send private message", "eu.epitech.reaction.ReactionExample");
 	}};
 
 	public static AAction createActionFromName(String name) {

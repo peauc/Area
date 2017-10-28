@@ -1,7 +1,6 @@
 package eu.epitech;
 
 import eu.epitech.API.ApiUtils;
-
 import eu.epitech.action.AAction;
 import eu.epitech.reaction.AReaction;
 import org.json.JSONObject;
@@ -46,6 +45,8 @@ public class DatabaseManager {
 			System.out.println("SQLException: " + e.getMessage());
 			System.out.println("SQLState: " + e.getSQLState());
 			System.out.println("VendorError: " + e.getErrorCode());
+		} catch (Exception e) {
+			e.printStackTrace();
 		} finally { // Close statements and results before returning.
 			if (rs != null) {
 				try {
@@ -61,6 +62,39 @@ public class DatabaseManager {
 		return (true);
 	}
 
+	public ArrayList<User> retrieveAllUsersFromDatabase() {
+		ArrayList<User> users = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			pstmt = this.connection.prepareStatement("SELECT * FROM user");
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				users.add(new User(rs.getString("name"), rs.getString("password")));
+				this.retrieveUserTokens(users.get(users.size() - 1), rs.getInt("id"));
+				this.retrieveUserAreas(users.get(users.size() - 1), rs.getInt("id"));
+			}
+		} catch (SQLException e) {
+			System.out.println("SQLException: " + e.getMessage());
+			System.out.println("SQLState: " + e.getSQLState());
+			System.out.println("VendorError: " + e.getErrorCode());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally { // Close statements and results before returning.
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException ignored) { }
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException ignored) { }
+			}
+		}
+		return (users);
+	}
 	/**
 	 * returns all stocked information about a user, or null if the authentication failed
 	 * Better to call it after a call to hasUser()
@@ -88,6 +122,8 @@ public class DatabaseManager {
 			System.out.println("SQLException: " + e.getMessage());
 			System.out.println("SQLState: " + e.getSQLState());
 			System.out.println("VendorError: " + e.getErrorCode());
+		} catch (Exception e) {
+			e.printStackTrace();
 		} finally { // Close statements and results before returning.
 			if (rs != null) {
 				try {
@@ -123,6 +159,8 @@ public class DatabaseManager {
 			System.out.println("SQLException: " + e.getMessage());
 			System.out.println("SQLState: " + e.getSQLState());
 			System.out.println("VendorError: " + e.getErrorCode());
+		} catch (Exception e) {
+			e.printStackTrace();
 		} finally { // Close statements and results before returning.
 			if (rs != null) {
 				try {
@@ -153,13 +191,16 @@ public class DatabaseManager {
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				areas.add(new Area(user, rs.getString("name")));
-				this.retrieveAreaAction(areas.get(areas.size() - 1), areas.get(areas.size() - 1).getDbId(this, userId));
+				this.retrieveAreaAction(areas.get(areas.size() - 1), rs.getInt("id"));
+				this.retrieveAreaReaction(areas.get(areas.size() - 1), rs.getInt("id"));
 			}
 			user.setAreas(areas);
 		} catch (SQLException e) {
 			System.out.println("SQLException: " + e.getMessage());
 			System.out.println("SQLState: " + e.getSQLState());
 			System.out.println("VendorError: " + e.getErrorCode());
+		} catch (Exception e) {
+			e.printStackTrace();
 		} finally { // Close statements and results before returning.
 			if (rs != null) {
 				try {
@@ -182,7 +223,7 @@ public class DatabaseManager {
 	private void retrieveAreaAction(Area area, int areaId) {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		AAction action = null;
+		AAction action;
 
 		try {
 			if (areaId == -1)
@@ -194,13 +235,18 @@ public class DatabaseManager {
 				action = ApiUtils.createActionFromName(rs.getString("name"));
 				if (action == null)
 					return;
-				action.setConfig(new JSONObject(rs.getString("config")));
-				action.setPreviousDatas(new JSONObject(rs.getString("previous_state")));
+				if (rs.getString("config") != null)
+					action.setConfig(new JSONObject(rs.getString("config")));
+				if (rs.getString("previous_state") != null)
+					action.setPreviousDatas(new JSONObject(rs.getString("previous_state")));
+				area.setAction(action);
 			}
 		} catch (SQLException e) {
 			System.out.println("SQLException: " + e.getMessage());
 			System.out.println("SQLState: " + e.getSQLState());
 			System.out.println("VendorError: " + e.getErrorCode());
+		} catch (Exception e) {
+			e.printStackTrace();
 		} finally { // Close statements and results before returning.
 			if (rs != null) {
 				try {
@@ -223,7 +269,7 @@ public class DatabaseManager {
 	private void retrieveAreaReaction(Area area, int areaId) {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		AReaction reaction = null;
+		AReaction reaction;
 
 		try {
 			if (areaId == -1)
@@ -235,12 +281,16 @@ public class DatabaseManager {
 				reaction = ApiUtils.createReactionFromName(rs.getString("name"));
 				if (reaction == null)
 					return;
-				reaction.setConfig(new JSONObject(rs.getString("config")));
+				if (rs.getString("config") != null)
+					reaction.setConfig(new JSONObject(rs.getString("config")));
+				area.setReaction(reaction);
 			}
 		} catch (SQLException e) {
 			System.out.println("SQLException: " + e.getMessage());
 			System.out.println("SQLState: " + e.getSQLState());
 			System.out.println("VendorError: " + e.getErrorCode());
+		} catch (Exception e) {
+			e.printStackTrace();
 		} finally { // Close statements and results before returning.
 			if (rs != null) {
 				try {
