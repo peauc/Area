@@ -63,12 +63,12 @@ public class ConfigView extends VerticalLayout implements View {
                     /* Corresponding to the component config link with this Action-Reaction
                     *   check if the user set valid input
                     */
-                    if () {
-
-                    } else {
-                        // Add the configuration to the user config before changing view
-                        getUI().getNavigator().navigateTo("action");
-                    }
+//                    if () {
+//
+//                    } else {
+//                        // Add the configuration to the user config before changing view
+//                        getUI().getNavigator().navigateTo("action");
+//                    }
                 }
                 else {
                     if (getComponentCount() > count)

@@ -69,12 +69,16 @@ public class NavigatorUI extends UI {
         Navigator.ComponentContainerViewDisplay viewDisplay = new Navigator.ComponentContainerViewDisplay(layout);
         navigator = new Navigator(UI.getCurrent(),viewDisplay);
 
-        navigator.addView("", new LoginView());
-        navigator.addView("action", new ActionView());
-        navigator.addView("reaction", new ReactionView());
-        navigator.addView("config", new ConfigView());
-        navigator.addView("account", new CreateAccountView());
-        navigator.addView("login", new LoginView());
+        try {
+            navigator.addView("", new LoginView());
+            navigator.addView("action", new ActionView());
+            navigator.addView("reaction", new ReactionView());
+            navigator.addView("config", new ConfigView());
+            navigator.addView("account", new CreateAccountView());
+            navigator.addView("login", new LoginView());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
         ServletContext ctx = VaadinServlet.getCurrent().getServletContext();
         StdSchedulerFactory factory = (StdSchedulerFactory) ctx.getAttribute("org.quartz.impl.StdSchedulerFactory.KEY");
