@@ -2,6 +2,7 @@ package eu.epitech;
 
 import javax.servlet.annotation.WebServlet;
 
+import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.navigator.Navigator;
@@ -18,6 +19,7 @@ import com.vaadin.ui.VerticalLayout;
  * overridden to add component to the user interface and initialize non-component functionality.
  */
 
+@Push
 @Theme("mytheme")
 public class NavigatorUI extends UI {
     public Navigator navigator;

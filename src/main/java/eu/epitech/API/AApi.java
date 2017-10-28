@@ -78,6 +78,7 @@ public abstract class AApi {
 
     public static String send(String URL, Verb mode) throws IOException {
         if (getoAuthService() == null || getToken() == null) {
+            System.out.println("send returning null");
             return null;
         }
         final OAuthRequest request = new OAuthRequest(mode, URL, getoAuthService());

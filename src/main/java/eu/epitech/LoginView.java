@@ -37,6 +37,7 @@ public class LoginView extends AbsoluteLayout implements View {
         addComponent(password, "left: 50px; top: 150px;");
         addComponent(loginButton(), "left: 75px; top: 200px;");
         addComponent(accountButton(), "left: 35px; top: 300px;");
+        addComponent(new DemoLayout(), "left: 50; top:350;");
         setResponsive(true);
     }
 

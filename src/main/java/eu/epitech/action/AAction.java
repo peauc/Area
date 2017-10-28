@@ -13,13 +13,42 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class AAction implements IAction {
-	protected ApiUtils.Name api;
+	protected Boolean isInitialized;
+    protected ApiUtils.Name api;
     protected String name;
     protected String description;
     protected JSONObject config = null;
     protected JSONObject previousDatas = null;
 	protected List<String> fields;
     protected Map<String, FieldType> requiredConfigFields = null;
+
+    public Boolean getInitialized() {
+        return isInitialized;
+    }
+
+    public void setInitialized(Boolean initialized) {
+        isInitialized = initialized;
+    }
+
+    public void setApi(ApiUtils.Name api) {
+        this.api = api;
+    }
+
+    public List<String> getFields() {
+        return fields;
+    }
+
+    public void setFields(List<String> fields) {
+        this.fields = fields;
+    }
+
+    public Map<String, FieldType> getRequiredConfigFields() {
+        return requiredConfigFields;
+    }
+
+    public void setRequiredConfigFields(Map<String, FieldType> requiredConfigFields) {
+        this.requiredConfigFields = requiredConfigFields;
+    }
 
     public AAction() {
 

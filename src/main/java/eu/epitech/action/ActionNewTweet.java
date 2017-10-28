@@ -9,18 +9,31 @@ import eu.epitech.API.Twitter;
 import eu.epitech.Area;
 import eu.epitech.DatabaseManager;
 import eu.epitech.FieldType;
-import jdk.nashorn.internal.parser.JSONParser;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class ActionNewTweet extends AAction {
     private static final JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+    List<String> params = ImmutableList.of("text", "id");
+    List<JSONObject> whatHappened = new ArrayList<>();
 
     public ActionNewTweet() {
         super();
+        setApi(ApiUtils.Name.TWITTER);
+        setDescription("Fire whenever you are mentioned on twitter");
+    }
+
+    public List<JSONObject> getWhatHappened() {
+        return whatHappened;
+    }
+
+    public void setWhatHappened(List<JSONObject> whatHappened) {
+        this.whatHappened = whatHappened;
     }
 
     @Override
@@ -91,13 +104,30 @@ public class ActionNewTweet extends AAction {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else {
+            try {
+                String tmp = Twitter.send("https://api.twitter.com/1.1/statuses/mentions_timeline.json?count=1", Verb.GET);
+                if (tmp != null) {
+                    JSONArray array = new JSONArray(tmp);
+                    for (Integer i = 0; i < array.length(); i++) {
+                        if (array.getJSONObject(i).equals(previousDatas)) {
+                            for (Integer j = 0; j < i; j++) {
+                                getWhatHappened().add(array.getJSONObject(j));
+                            }
+                            setPreviousDatas(whatHappened().get(1));
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
 
     @Override
     public List<JSONObject> whatHappened() {
-        return null;
+        return whatHappened;
     }
 
     @Override
@@ -115,17 +145,21 @@ public class ActionNewTweet extends AAction {
         return super.setConfig(conf);
     }
 
-    private JSONObject initialize() throws IOException {
+    private void initialize() throws IOException {
         String tmp = Twitter.send("https://api.twitter.com/1.1/statuses/mentions_timeline.json?count=1", Verb.GET);
-        if (tmp == null)
-            return null;
-        JSONObject response = new JSONObject(tmp);
-        if (response.isNull("text")) {
-            return null;
+        if (tmp == null) {
+            System.out.println("tmp is null");
+            setInitialized(false);
+            return ;
         }
-        previousDatas = response;
-
-        return (response);
+        JSONArray response = new JSONArray(tmp);
+        if (response.length() == 0) {
+            System.out.println("Json is empty");
+            setInitialized(true);
+        }
+        setInitialized(true);
+        System.out.println(response.get(0));
+        JSONObject object = new JSONObject(response.get(0));
+        setPreviousDatas(object);
     }
-    List<String> params = ImmutableList.of("text", "id");
 }
