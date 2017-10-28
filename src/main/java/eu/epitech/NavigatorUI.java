@@ -35,6 +35,15 @@ import static org.quartz.TriggerBuilder.newTrigger;
 @Theme("mytheme")
 public class NavigatorUI extends UI {
     public Navigator navigator;
+    public static DatabaseManager dbm = null;
+
+    static {
+        try {
+            dbm = new DatabaseManager();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     /*
     ** The three following methods / attributes can be use to pass Object between different view
@@ -72,6 +81,7 @@ public class NavigatorUI extends UI {
         navigator = new Navigator(UI.getCurrent(),viewDisplay);
 
         try {
+            DatabaseManager dbm = new DatabaseManager();
             navigator.addView("", new LoginView());
             navigator.addView("action", new ActionView());
             navigator.addView("reaction", new ReactionView());

@@ -48,6 +48,10 @@ public abstract class AReaction implements IReaction {
         return config;
     }
 
+	public Map<String, FieldType> getRequiredConfigFields() {
+		return requiredConfigFields;
+	}
+
 	/**
 	 * Adds the reaction to the database or update it's config if one is already present.
 	 * @param dbm
