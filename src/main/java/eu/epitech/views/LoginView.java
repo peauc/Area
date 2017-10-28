@@ -36,11 +36,11 @@ public class LoginView extends AbsoluteLayout implements View {
     private int countObject = 5;
 
     public LoginView() throws ClassNotFoundException {
+        this.dbm = new DatabaseManager();
         setSizeFull();
         setHeight("500px");
         setWidth("500px");
 
-        this.dbm = new DatabaseManager();
         addComponent(username, "left: 50px; top: 50px;");
         addComponent(password, "left: 50px; top: 150px;");
         addComponent(loginButton(), "left: 75px; top: 200px;");
@@ -98,6 +98,7 @@ public class LoginView extends AbsoluteLayout implements View {
         Button button = new Button("Create Account", new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
+                NavigatorUI.putData(getUI(), dbm);
                 getUI().getNavigator().navigateTo("account");
             }
         });

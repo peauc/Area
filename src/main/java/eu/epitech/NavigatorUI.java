@@ -70,6 +70,7 @@ public class NavigatorUI extends UI {
         navigator = new Navigator(UI.getCurrent(),viewDisplay);
 
         try {
+            DatabaseManager dbm = new DatabaseManager();
             navigator.addView("", new LoginView());
             navigator.addView("action", new ActionView());
             navigator.addView("reaction", new ReactionView());

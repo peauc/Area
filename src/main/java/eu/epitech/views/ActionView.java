@@ -26,9 +26,9 @@ import java.util.ArrayList;
 @SuppressWarnings("serial")
 public class ActionView extends VerticalLayout implements View {
         private ArrayList<Button> actionsButton = new ArrayList<Button>();
-        private int nbAction = 0;
-        private DatabaseManager dbm;
-        private User user;
+        private int nbAction = 4;
+        private DatabaseManager dbm = null;
+        private User user = null;
 
         // Set in Action View the nbAction attribute by set it with the current nbAction we have
     public ActionView() {
@@ -47,6 +47,8 @@ public class ActionView extends VerticalLayout implements View {
         try {
             this.user = (User) NavigatorUI.readData(getUI());
             this.dbm = (DatabaseManager) NavigatorUI.readData(getUI());
+			if (this.dbm == null)
+				this.dbm = new DatabaseManager();
         } catch (Exception e) {
             e.printStackTrace();
         }
