@@ -22,6 +22,10 @@ public class MainJob implements Job {
 
 		try {
 			dbm = new DatabaseManager();
+			if (dbm.getConnection() == null) {
+				System.out.println("Cannot connect to database, ABORT");
+				return;
+			}
 			out.println("Executing job in background...");
 			users = dbm.retrieveAllUsersFromDatabase();
 			for (User user : users) {

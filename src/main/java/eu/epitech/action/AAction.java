@@ -51,7 +51,6 @@ public abstract class AAction implements IAction {
     }
 
     public AAction() {
-
 	}
 
 	public ApiUtils.Name getApi() {
@@ -214,6 +213,8 @@ public abstract class AAction implements IAction {
 
     @Override
     public boolean setConfig(JSONObject conf) {
+		if (conf == null)
+			return false;
         config = new JSONObject();
         for (Map.Entry<String, FieldType> field : requiredConfigFields.entrySet())
         {

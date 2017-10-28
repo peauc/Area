@@ -1,123 +1,47 @@
 
 package eu.epitech.action;
 
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.DateTime;
-import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.calendar.Calendar;
-import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventAttendee;
+import com.google.api.services.calendar.model.EventReminder;
 import com.google.api.services.calendar.model.Events;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
+import eu.epitech.API.ApiGCalendar;
 import eu.epitech.API.ApiUtils;
 import eu.epitech.FieldType;
 import org.json.JSONObject;
 import org.pmw.tinylog.Logger;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ActionGCalendar extends AAction {
-
     private String lastSyncToken = null;
-    private DateTime lastSyncDate = null;
+    private long lastSyncDate;
     private ArrayList<JSONObject> eventsStore = new ArrayList<>();
 
-    // Application Name
-    private static final String APPLICATION_NAME = "THE AREA";
-
-    // Directory to store user credentials for this application.
-    private static final java.io.File DATA_STORE_DIR = new java.io.File(
-            System.getProperty("user.dir"), ".credentials/calendar-java-quickstart");
-
-    // Global instance of the {@link FileDataStoreFactory}.
-    private static FileDataStoreFactory DATA_STORE_FACTORY;
-
-    // Global instance of the JSON factory.
-    private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-
-    // Global instance of the HTTP transport.
-    private static HttpTransport HTTP_TRANSPORT;
-
-    /** Global instance of the scopes required by this quickstart.
-     *
-     * If modifying these scopes, delete your previously saved credentials
-     * at ~/.credentials/calendar-java-quickstart
-     */
-    private static final List<String> SCOPES = Arrays.asList(CalendarScopes.CALENDAR_READONLY);
-
-    static {
-        try {
-            HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-            DATA_STORE_FACTORY = new FileDataStoreFactory(DATA_STORE_DIR);
-        } catch (Throwable t) {
-            t.printStackTrace();
-            System.exit(1);
-        }
-    }
-
     public ActionGCalendar() {
-        this.api = ApiUtils.Name.FACEBOOK;
-        this.name = "GOOGLE CALENDAR : on event creation";
+        this.api = ApiUtils.Name.GOOGLE_CALENDAR;
+        this.name = "GOOGLE CALENDAR : On event creation";
         this.description = "Activates when someone creates a new event on Google Calendar";
         this.fields = new ArrayList<>();
         this.fields.add("start");
         this.fields.add("timezone");
         this.fields.add("end");
-        this.fields.add("creator");
         this.fields.add("description");
         this.fields.add("location");
         this.fields.add("summary");
+        this.fields.add("attendees");
+        this.fields.add("attachments");
+        this.fields.add("remainders");
         this.requiredConfigFields = new HashMap<>();
         this.requiredConfigFields.put("email", FieldType.EMAIL);
         this.config = null;
         this.previousDatas = null;
-    }
-
-    /**
-     * Creates an authorized Credential object.
-     * @return an authorized Credential object.
-     * @throws IOException
-     */
-    private static Credential authorize() throws IOException {
-        // Load client secrets.
-        InputStream in = ActionGCalendar.class.getResourceAsStream("/client_secret.json");
-        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
-
-        // Build flow and trigger user authorization request.
-        GoogleAuthorizationCodeFlow flow =  new GoogleAuthorizationCodeFlow.Builder(
-                HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-                .setDataStoreFactory(DATA_STORE_FACTORY)
-                .setAccessType("offline")
-                .build();
-        Credential credential =
-                new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
-        System.out.println("Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
-        return credential;
-    }
-
-    /**
-     * Build and return an authorized Calendar client service.
-     * @return an authorized Calendar client service
-     * @throws IOException
-     */
-    private static com.google.api.services.calendar.Calendar getCalendarService() throws IOException {
-        Credential credential = authorize();
-        return new com.google.api.services.calendar.Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
-                .setApplicationName(APPLICATION_NAME)
-                .build();
     }
 
     private Events fullSync(Calendar calendar) throws Exception {
@@ -144,7 +68,8 @@ public class ActionGCalendar extends AAction {
             fullSync(calendar);
             return null;
         } catch (Exception e) {
-            Logger.error(e.getMessage());
+            Logger.error("Error occurred Calendar first syncing attempt");
+            Logger.debug(e);
             return null;
         }
     }
@@ -158,31 +83,51 @@ public class ActionGCalendar extends AAction {
         json.put("start", start == null ? e.getStart().getDate() : start);
         json.put("timezone", e.getStart().getTimeZone());
         json.put("end", end == null ? e.getEnd().getDate() : end);
-        json.put("creator", e.getCreator().getDisplayName());
         json.put("description", e.getDescription());
         json.put("location", e.getLocation());
         json.put("summary", e.getSummary());
+
+        List<String> attendees = new ArrayList<>();
+        for (EventAttendee attendee : e.getAttendees()) {
+            attendees.add(attendee.getEmail());
+        }
+        json.put("attendees", attendees);
+
+        List<String> remindersMethods = new ArrayList<>();
+        List<Integer> remindersMinutes = new ArrayList<>();
+        for (EventReminder reminder : e.getReminders().getOverrides()) {
+            remindersMethods.add(reminder.getMethod());
+            remindersMinutes.add(reminder.getMinutes());
+        }
+        json.put("remindersMethods", remindersMethods);
+        json.put("remindersMinutes", remindersMinutes);
+        json.put("recurrences", e.getRecurrence());
         return json;
     }
 
     private boolean process() {
         Calendar calendar;
         try {
-            calendar = getCalendarService();
+            calendar = ApiGCalendar.getCalendarService();
         } catch (Exception e) {
-            Logger.error(e.getMessage());
+            Logger.error("Error occurred while acquiring Calendar service");
+            Logger.debug(e);
             return false;
         }
 
         String pageToken;
         Events events;
         boolean actionFound = false;
+        if (previousDatas != null) {
+            lastSyncToken = previousDatas.getString("lastSyncToken");
+        }
 
         do {
             try {
                 events = syncCalendar(calendar);
             } catch (Exception e) {
-                Logger.error(e.getMessage());
+                Logger.error("Error occurred during second calendar syncing attempt");
+                Logger.debug(e);
                 return false;
             }
 
@@ -206,16 +151,22 @@ public class ActionGCalendar extends AAction {
         } while (pageToken != null);
 
         lastSyncToken = events.getNextSyncToken();
+
+        if (previousDatas == null)
+            previousDatas = new JSONObject();
+        previousDatas.put("lastSyncToken", lastSyncToken);
+        previousDatas.put("lastSyncDate", System.currentTimeMillis());
         return actionFound;
     }
 
     private boolean isNewEvent(Event event) {
-        return event.getCreated().getValue() > lastSyncDate.getValue();
+        return event.getCreated().getValue() > lastSyncDate;
     }
 
     @Override
     public boolean hasHappened() {
-        lastSyncDate = new DateTime(System.currentTimeMillis());
+        if (previousDatas != null)
+            lastSyncDate = previousDatas.getLong("lastSyncDate");
         return process();
     }
 
