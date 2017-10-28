@@ -69,8 +69,7 @@ public class ActionGCalendar extends AAction {
             return null;
         } catch (Exception e) {
             Logger.error("Error occurred Calendar first syncing attempt");
-            Logger.debug(e.getMessage());
-            Logger.debug(e.getCause());
+            Logger.debug(e);
             return null;
         }
     }
@@ -112,8 +111,7 @@ public class ActionGCalendar extends AAction {
             calendar = ApiGCalendar.getCalendarService();
         } catch (Exception e) {
             Logger.error("Error occurred while acquiring Calendar service");
-            Logger.debug(e.getMessage());
-            Logger.debug(e.getCause());
+            Logger.debug(e);
             return false;
         }
 
@@ -129,8 +127,7 @@ public class ActionGCalendar extends AAction {
                 events = syncCalendar(calendar);
             } catch (Exception e) {
                 Logger.error("Error occurred during second calendar syncing attempt");
-                Logger.debug(e.getMessage());
-                Logger.debug(e.getCause());
+                Logger.debug(e);
                 return false;
             }
 

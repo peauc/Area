@@ -4,6 +4,7 @@ import eu.epitech.API.ApiUtils;
 import eu.epitech.action.AAction;
 import eu.epitech.reaction.AReaction;
 import org.json.JSONObject;
+import org.pmw.tinylog.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -80,7 +81,8 @@ public class DatabaseManager {
 			System.out.println("SQLState: " + e.getSQLState());
 			System.out.println("VendorError: " + e.getErrorCode());
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.error("Error occurred during user acquisition");
+			Logger.debug(e);
 		} finally { // Close statements and results before returning.
 			if (rs != null) {
 				try {

@@ -113,8 +113,7 @@ public class ReactionGCalendar extends AReaction {
             calendar = ApiGCalendar.getCalendarService();
         } catch (IOException e) {
             Logger.error("Error occurred while getting Calendar service");
-            Logger.debug(e.getMessage());
-            Logger.debug(e.getCause());
+            Logger.debug(e);
             return;
         }
 
@@ -123,8 +122,7 @@ public class ReactionGCalendar extends AReaction {
             calendar.events().insert("primary", event).execute();
         } catch (IOException e) {
             Logger.error("Error occured during Event insertion");
-            Logger.debug(e.getMessage());
-            Logger.debug(e.getCause());
+            Logger.debug(e);
         }
     }
 }
