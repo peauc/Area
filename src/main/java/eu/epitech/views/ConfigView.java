@@ -37,9 +37,8 @@ public class ConfigView extends AbsoluteLayout implements View {
      */
     private ArrayList<TextField> actionConfig = new ArrayList<>();
     private ArrayList<TextField> reactionConfig = new ArrayList<>();
-    Label actionTf = null;
-    Label reactionTf = null;
-    private final Label label = new Label();
+    private Label actionTf = null;
+    private Label reactionTf = null;
     private User user;
     private AAction action;
     private AReaction reaction;
@@ -56,10 +55,6 @@ public class ConfigView extends AbsoluteLayout implements View {
         setSizeFull();
         setWidth("1000px");
         setHeight("1000px");
-//        setSpacing(true);
-//        // Add the real component to this layout
-//        addComponent(attr1);
-//        addComponent(attr2);
     }
 
     /*
@@ -131,7 +126,7 @@ public class ConfigView extends AbsoluteLayout implements View {
     }
 
     private Button validateButton() {
-        Button but = new Button("Validate", (Button.ClickListener) clickEvent -> {
+        return new Button("Validate", (Button.ClickListener) clickEvent -> {
             JSONObject confAction = null;
             JSONObject confReaction = null;
             for (TextField tf : actionConfig) {
@@ -165,6 +160,5 @@ public class ConfigView extends AbsoluteLayout implements View {
                 getUI().getNavigator().navigateTo("action");
             }
         });
-        return but;
     }
 }

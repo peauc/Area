@@ -30,9 +30,6 @@ public class LoginView extends AbsoluteLayout implements View {
     private TextField password = new TextField("Password");
     private Label labelTmp = new Label();
 
-    // Count nb of object on the View
-    private int countObject = 5;
-
     public LoginView() throws ClassNotFoundException {
         setSizeFull();
         setHeight("500px");
@@ -66,9 +63,10 @@ public class LoginView extends AbsoluteLayout implements View {
     /*
     ** Test if user have set a valid username, and the good password associate
      */
-    public void testBadPassword() {
+    private void testBadPassword() {
         User user;
 
+        int countObject = 5;
         if (dbm == null || dbm.getConnection() == null) {
             if (!labelTmp.getValue().equals("Error : Cannot access database")) {
                 labelTmp.setCaption("Error : Cannot access database");
@@ -93,31 +91,22 @@ public class LoginView extends AbsoluteLayout implements View {
 
     private Button loginButton()
     {
-        Button button = new Button("Login", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                testBadPassword();
-            }
-        });
-        return button;
+        return new Button("Login", (Button.ClickListener) clickEvent -> testBadPassword());
     }
 
     private Button accountButton()
     {
-        Button button = new Button("Create Account", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                if (dbm == null || dbm.getConnection() == null) {
-                    if (!labelTmp.getValue().equals("Error : Cannot access database")) {
-                        labelTmp.setCaption("Error : Cannot access database");
-                        addComponent(labelTmp, "top: 350px; left: 50px;");
-                    }
-                    return;
-                }
-                NavigatorUI.putData(getUI(), new Stock(null, null, null, null));
-                getUI().getNavigator().navigateTo("account");
-            }
-        });
+        Button button = new Button("Create Account", (Button.ClickListener) clickEvent -> {
+			if (dbm == null || dbm.getConnection() == null) {
+				if (!labelTmp.getValue().equals("Error : Cannot access database")) {
+					labelTmp.setCaption("Error : Cannot access database");
+					addComponent(labelTmp, "top: 350px; left: 50px;");
+				}
+				return;
+			}
+			NavigatorUI.putData(getUI(), new Stock(null, null, null, null));
+			getUI().getNavigator().navigateTo("account");
+		});
         button.setStyleName(ValoTheme.BUTTON_LINK);
         return button;
     }
