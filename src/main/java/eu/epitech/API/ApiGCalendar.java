@@ -41,7 +41,7 @@ public class ApiGCalendar extends AApi {
      * If modifying these scopes, delete your previously saved credentials
      * at ~/.credentials/calendar-java-quickstart
      */
-    private static final List<String> SCOPES = Arrays.asList(CalendarScopes.CALENDAR_READONLY);
+    private static final List<String> SCOPES = Arrays.asList(CalendarScopes.CALENDAR);
 
 
     /**

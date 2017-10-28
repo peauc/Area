@@ -1,6 +1,5 @@
 package eu.epitech.action;
 
-import eu.epitech.API.AApi;
 import eu.epitech.API.ApiUtils;
 import eu.epitech.Area;
 import eu.epitech.DatabaseManager;

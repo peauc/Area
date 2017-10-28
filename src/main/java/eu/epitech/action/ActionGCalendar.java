@@ -1,38 +1,25 @@
 
 package eu.epitech.action;
 
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.DateTime;
-import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.calendar.Calendar;
-import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import eu.epitech.API.ApiGCalendar;
 import eu.epitech.API.ApiUtils;
 import eu.epitech.FieldType;
 import org.json.JSONObject;
 import org.pmw.tinylog.Logger;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ActionGCalendar extends AAction {
     private String lastSyncToken = null;
-    private DateTime lastSyncDate = null;
+    private long lastSyncDate;
     private ArrayList<JSONObject> eventsStore = new ArrayList<>();
 
     public ActionGCalendar() {
@@ -110,6 +97,9 @@ public class ActionGCalendar extends AAction {
         String pageToken;
         Events events;
         boolean actionFound = false;
+        if (previousDatas != null) {
+            lastSyncToken = previousDatas.getString("lastSyncToken");
+        }
 
         do {
             try {
@@ -140,18 +130,21 @@ public class ActionGCalendar extends AAction {
 
         lastSyncToken = events.getNextSyncToken();
 
-
-
+        if (previousDatas == null)
+            previousDatas = new JSONObject();
+        previousDatas.put("lastSyncToken", lastSyncToken);
+        previousDatas.put("lastSyncDate", System.currentTimeMillis());
         return actionFound;
     }
 
     private boolean isNewEvent(Event event) {
-        return event.getCreated().getValue() > lastSyncDate.getValue();
+        return event.getCreated().getValue() > lastSyncDate;
     }
 
     @Override
     public boolean hasHappened() {
-        lastSyncDate = new DateTime(System.currentTimeMillis());
+        if (previousDatas != null)
+            lastSyncDate = previousDatas.getLong("lastSyncDate");
         return process();
     }
 
