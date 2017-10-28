@@ -35,6 +35,15 @@ import static org.quartz.TriggerBuilder.newTrigger;
 @Theme("mytheme")
 public class NavigatorUI extends UI {
     public Navigator navigator;
+    public static DatabaseManager dbm = null;
+
+    static {
+        try {
+            dbm = new DatabaseManager();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     /*
     ** The three following methods / attributes can be use to pass Object between different view
@@ -96,8 +105,7 @@ public class NavigatorUI extends UI {
 
                 scheduler.scheduleJob(jobDetail, trigger);
             }
-        } catch (SchedulerException e) {
-            e.printStackTrace();
+        } catch (SchedulerException ignored) {
         }
     }
 

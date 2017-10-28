@@ -1,9 +1,14 @@
 package eu.epitech.API;
 
 import eu.epitech.action.AAction;
+import eu.epitech.action.ActionExample;
 import eu.epitech.reaction.AReaction;
+import eu.epitech.reaction.ReactionExample;
 
+import javax.swing.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ApiUtils {
@@ -28,6 +33,14 @@ public class ApiUtils {
 
 	public static final Map<String, String> corrTableReactionName = new HashMap<String, String>() {{
 		put("TWITTER : Send private message", "eu.epitech.reaction.ReactionExample");
+	}};
+
+	public static final ArrayList<AAction> availableActions = new ArrayList<AAction>() {{
+		add(new ActionExample());
+	}};
+
+	public static final ArrayList<AReaction> availableReactions = new ArrayList<AReaction>() {{
+		add(new ReactionExample());
 	}};
 
 	public static AAction createActionFromName(String name) {

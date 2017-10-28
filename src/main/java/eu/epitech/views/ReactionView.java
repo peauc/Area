@@ -6,7 +6,15 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
+import eu.epitech.API.ApiUtils;
+import eu.epitech.DatabaseManager;
+import eu.epitech.NavigatorUI;
+import eu.epitech.Stock;
+import eu.epitech.User;
+import eu.epitech.action.AAction;
+import eu.epitech.reaction.AReaction;
 
 import java.util.ArrayList;
 
@@ -24,7 +32,9 @@ import java.util.ArrayList;
 public class ReactionView extends AbsoluteLayout implements View {
     private ArrayList<Button> reactionsButton = new ArrayList<Button>();
     private String titleAction;
-    private int nbReaction = 0;
+    private int nbReaction = 1;
+    private User user = null;
+    private AAction action = null;
 
     /*
     *  With the action passing in this view, set in the ReactionView constructor the nb of reaction linked
@@ -32,20 +42,12 @@ public class ReactionView extends AbsoluteLayout implements View {
      */
     public ReactionView() {
         setSizeFull();
-        int maxHeight = (nbReaction + 10) * 100;
-        setWidth("2000px");
+        int maxHeight = (ApiUtils.availableReactions.size() + 10) * 100;
+        setWidth("1000px");
         setHeight(Integer.toString(maxHeight) + "px");
         int high = 50;
-        for (int i = 0; i < nbReaction; ++i)
-        {
-            // Set the name of the Reaction, and if you want a description of this.
-            String nameReaction = "";
-            String descReaction = "";
-            reactionsButton.add(reactionButton(nameReaction));
-        }
-        for (Button button : reactionsButton) {
-            addComponent(button, "top: " + Integer.toString(high) + "px; left: 1500px;");
-            high += 100;
+        for (AReaction reaction : ApiUtils.availableReactions) {
+            reactionsButton.add(reactionButton(reaction.getName()));
         }
     }
 
@@ -54,24 +56,55 @@ public class ReactionView extends AbsoluteLayout implements View {
      */
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        if (event.getParameters() != null)
-        {
+        try {
+            Stock stock = (Stock) NavigatorUI.readData(getUI());
+            if (stock != null) {
+                if (stock.getPrompt() != null) {
+                    addComponent(new Label(stock.getPrompt()));
+                }
+                if (stock.getUser() != null) {
+                    this.user = stock.getUser();
+                } else {
+                    NavigatorUI.putData(getUI(), new Stock(null, null, null, "You are not connected"));
+                    getUI().getNavigator().navigateTo("");
+                }
+                if (stock.getAction() != null) {
+                    this.action = stock.getAction();
+                } else {
+                    NavigatorUI.putData(getUI(), new Stock(this.user, null, null, "You must choose an action first"));
+                    getUI().getNavigator().navigateTo("action");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (event.getParameters() != null) {
             titleAction = event.getParameters();
             addComponent(actionButton(titleAction), "top: 50px; left: 50px;");
+        } else {
+            NavigatorUI.putData(getUI(), new Stock(null, null, null, "You must choose an action first"));
+            getUI().getNavigator().navigateTo("action");
         }
-        Notification.show("Welcome to Reaction Page :)");
+
+        int high = 50;
+        for (int i = 0; i < ApiUtils.availableReactions.size(); i++) {
+            if (ApiUtils.availableReactions.get(i).isExecutable(this.action.getFields())) {
+                addComponent(reactionsButton.get(i), "top: " + Integer.toString(high) + "px; left: 400px;");
+                high += 100;
+            }
+        }
     }
 
     private Button actionButton(String txt) {
         Button button = new Button(txt, new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                Notification.show("Please select a valid reaction !");
             }
         });
 
-        button.setWidth(Integer.toString((getUI().getPage().getBrowserWindowWidth()) / 2));
-        button.setHeight(Integer.toString((getUI().getPage().getBrowserWindowHeight()) / 2));
+        button.setWidth("300");
+        button.setHeight("500");
         button.setResponsive(true);
         return button;
     }
@@ -88,9 +121,14 @@ public class ReactionView extends AbsoluteLayout implements View {
                 *   Here we can pass the specific object Config with the specific methods situated in NavigatorView
                 *   to the next view.
                 */
-              getUI().getNavigator().navigateTo("config" + "/" + titleAction + "-" + txt);
+                NavigatorUI.putData(getUI(), new Stock(user, action, ApiUtils.createReactionFromName(txt), null));
+                getUI().getNavigator().navigateTo("config" + "/" + titleAction + "-" + txt);
             }
         });
+
+        button.setWidth("300");
+        button.setHeight("100");
+        button.setResponsive(true);
         return button;
     }
 }

@@ -29,7 +29,7 @@ public class ReactionExample extends AReaction {
 
 	@Override
 	public boolean isExecutable(List<String> fields) {
-		return false;
+		return true;
 	}
 
 	@Override

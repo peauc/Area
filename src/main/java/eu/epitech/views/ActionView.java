@@ -5,11 +5,13 @@ import com.vaadin.annotations.DesignRoot;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Notification;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
-import eu.epitech.DatabaseManager;
+import eu.epitech.API.ApiUtils;
 import eu.epitech.NavigatorUI;
+import eu.epitech.Stock;
 import eu.epitech.User;
+import eu.epitech.action.AAction;
 
 import java.util.ArrayList;
 
@@ -26,16 +28,17 @@ import java.util.ArrayList;
 @SuppressWarnings("serial")
 public class ActionView extends VerticalLayout implements View {
         private ArrayList<Button> actionsButton = new ArrayList<Button>();
-        private int nbAction = 4;
-        private DatabaseManager dbm = null;
+        private int nbAction = ApiUtils.availableActions.size();
         private User user = null;
 
         // Set in Action View the nbAction attribute by set it with the current nbAction we have
     public ActionView() {
+
+        addComponent(new Label("Choose an action !"));
         setSizeFull();
         setSpacing(true);
-        for (int i = 0; i < nbAction; ++i) {
-            actionsButton.add(actionButton("Description"));
+        for (AAction action : ApiUtils.availableActions) {
+            actionsButton.add(actionButton(action.getName()));
         }
         for (Button button : actionsButton) {
             addComponent(button);
@@ -45,14 +48,21 @@ public class ActionView extends VerticalLayout implements View {
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         try {
-            this.user = (User) NavigatorUI.readData(getUI());
-            this.dbm = (DatabaseManager) NavigatorUI.readData(getUI());
-			if (this.dbm == null)
-				this.dbm = new DatabaseManager();
+            Stock stock = (Stock) NavigatorUI.readData(getUI());
+            if (stock != null) {
+                if (stock.getPrompt() != null) {
+                    addComponent(new Label(stock.getPrompt()));
+                }
+                if (stock.getUser() != null) {
+                    this.user = stock.getUser();
+                } else {
+                    NavigatorUI.putData(getUI(), new Stock(null, null, null, "You are not connected"));
+                    getUI().getNavigator().navigateTo("");
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Notification.show("Welcome to action page !" + user.getName());
     }
 
     /*
@@ -64,6 +74,8 @@ public class ActionView extends VerticalLayout implements View {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
                 //txt is passing in parameters on the next view
+
+                NavigatorUI.putData(getUI(), new Stock(user, ApiUtils.createActionFromName(txt), null, null));
                 getUI().getNavigator().navigateTo("reaction" + "/" + txt);
             }
         });
