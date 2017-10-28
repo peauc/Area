@@ -5,6 +5,8 @@ import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventAttendee;
+import com.google.api.services.calendar.model.EventReminder;
 import com.google.api.services.calendar.model.Events;
 import eu.epitech.API.ApiGCalendar;
 import eu.epitech.API.ApiUtils;
@@ -30,10 +32,12 @@ public class ActionGCalendar extends AAction {
         this.fields.add("start");
         this.fields.add("timezone");
         this.fields.add("end");
-        this.fields.add("creator");
         this.fields.add("description");
         this.fields.add("location");
         this.fields.add("summary");
+        this.fields.add("attendees");
+        this.fields.add("attachments");
+        this.fields.add("remainders");
         this.requiredConfigFields = new HashMap<>();
         this.requiredConfigFields.put("email", FieldType.EMAIL);
         this.config = null;
@@ -64,7 +68,9 @@ public class ActionGCalendar extends AAction {
             fullSync(calendar);
             return null;
         } catch (Exception e) {
-            Logger.error(e.getMessage());
+            Logger.error("Error occurred Calendar first syncing attempt");
+            Logger.debug(e.getMessage());
+            Logger.debug(e.getCause());
             return null;
         }
     }
@@ -78,10 +84,25 @@ public class ActionGCalendar extends AAction {
         json.put("start", start == null ? e.getStart().getDate() : start);
         json.put("timezone", e.getStart().getTimeZone());
         json.put("end", end == null ? e.getEnd().getDate() : end);
-        json.put("creator", e.getCreator().getDisplayName());
         json.put("description", e.getDescription());
         json.put("location", e.getLocation());
         json.put("summary", e.getSummary());
+
+        List<String> attendees = new ArrayList<>();
+        for (EventAttendee attendee : e.getAttendees()) {
+            attendees.add(attendee.getEmail());
+        }
+        json.put("attendees", attendees);
+
+        List<String> remindersMethods = new ArrayList<>();
+        List<Integer> remindersMinutes = new ArrayList<>();
+        for (EventReminder reminder : e.getReminders().getOverrides()) {
+            remindersMethods.add(reminder.getMethod());
+            remindersMinutes.add(reminder.getMinutes());
+        }
+        json.put("remindersMethods", remindersMethods);
+        json.put("remindersMinutes", remindersMinutes);
+        json.put("recurrences", e.getRecurrence());
         return json;
     }
 
@@ -90,7 +111,9 @@ public class ActionGCalendar extends AAction {
         try {
             calendar = ApiGCalendar.getCalendarService();
         } catch (Exception e) {
-            Logger.error(e.getMessage());
+            Logger.error("Error occurred while acquiring Calendar service");
+            Logger.debug(e.getMessage());
+            Logger.debug(e.getCause());
             return false;
         }
 
@@ -105,7 +128,9 @@ public class ActionGCalendar extends AAction {
             try {
                 events = syncCalendar(calendar);
             } catch (Exception e) {
-                Logger.error(e.getMessage());
+                Logger.error("Error occurred during second calendar syncing attempt");
+                Logger.debug(e.getMessage());
+                Logger.debug(e.getCause());
                 return false;
             }
 
