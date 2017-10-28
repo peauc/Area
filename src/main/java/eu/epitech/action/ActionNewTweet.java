@@ -98,23 +98,34 @@ public class ActionNewTweet extends AAction {
 
     @Override
     public boolean hasHappened() {
+        whatHappened.clear();
         if (previousDatas == null) {
             try {
                 initialize();
+                return false;
             } catch (IOException e) {
                 e.printStackTrace();
+                return (false);
             }
         } else {
             try {
-                String tmp = Twitter.send("https://api.twitter.com/1.1/statuses/mentions_timeline.json?count=1", Verb.GET);
+                String tmp = Twitter.send("https://api.twitter.com/1.1/statuses/mentions_timeline.json", Verb.GET, Twitter.getToken());
                 if (tmp != null) {
                     JSONArray array = new JSONArray(tmp);
                     for (Integer i = 0; i < array.length(); i++) {
-                        if (array.getJSONObject(i).equals(previousDatas)) {
+                        System.out.println(array.getJSONObject(i));
+                        System.out.println(previousDatas);
+                        System.out.println("\n\n");
+                        if (array.getJSONObject(i).get("id").equals(previousDatas.get("id"))) {
+                            System.err.println("Found matching data " + i);
                             for (Integer j = 0; j < i; j++) {
-                                getWhatHappened().add(array.getJSONObject(j));
+                                getWhatHappened().add((JSONObject) array.get(j));
                             }
-                            setPreviousDatas(whatHappened().get(1));
+                            if (whatHappened.size() > 0)
+                                setPreviousDatas(getWhatHappened().get(0));
+                            else
+                                return (false);
+                            return (true);
                         }
                     }
                 }
@@ -124,7 +135,24 @@ public class ActionNewTweet extends AAction {
         }
         return false;
     }
-
+    private void initialize() throws IOException {
+        String tmp = Twitter.send("https://api.twitter.com/1.1/statuses/mentions_timeline.json?", Verb.GET, Twitter.getToken());
+        if (tmp == null) {
+            System.out.println("tmp is null");
+            setInitialized(false);
+            return;
+        }
+        JSONArray response = new JSONArray(tmp);
+        if (response.length() == 0) {
+            System.out.println("Json is empty");
+            setInitialized(true);
+        }
+        System.out.println(previousDatas);
+        System.out.println("Initalized\n\n");
+        setInitialized(true);
+        JSONObject object = response.getJSONObject(0);
+        previousDatas = object;
+    }
     @Override
     public List<JSONObject> whatHappened() {
         return whatHappened;
@@ -145,21 +173,5 @@ public class ActionNewTweet extends AAction {
         return super.setConfig(conf);
     }
 
-    private void initialize() throws IOException {
-        String tmp = Twitter.send("https://api.twitter.com/1.1/statuses/mentions_timeline.json?count=1", Verb.GET);
-        if (tmp == null) {
-            System.out.println("tmp is null");
-            setInitialized(false);
-            return ;
-        }
-        JSONArray response = new JSONArray(tmp);
-        if (response.length() == 0) {
-            System.out.println("Json is empty");
-            setInitialized(true);
-        }
-        setInitialized(true);
-        System.out.println(response.get(0));
-        JSONObject object = new JSONObject(response.get(0));
-        setPreviousDatas(object);
-    }
+
 }

@@ -1,7 +1,5 @@
 package eu.epitech;
 
-import javax.servlet.annotation.WebServlet;
-
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -10,18 +8,14 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import org.quartz.JobDetail;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.Trigger;
-import org.quartz.impl.StdSchedulerFactory;
+import eu.epitech.API.Twitter;
+import eu.epitech.action.ActionNewTweet;
+import eu.epitech.reaction.ReactionNewTweet;
 import eu.epitech.views.*;
+import org.json.JSONObject;
 
-import javax.servlet.ServletContext;
-
-import static org.quartz.JobBuilder.newJob;
-import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
-import static org.quartz.TriggerBuilder.newTrigger;
+import javax.servlet.annotation.WebServlet;
+import java.util.TimerTask;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser window
@@ -35,7 +29,8 @@ import static org.quartz.TriggerBuilder.newTrigger;
 @Theme("mytheme")
 public class NavigatorUI extends UI {
     public Navigator navigator;
-
+    ActionNewTweet action = new ActionNewTweet();
+    ReactionNewTweet reaction = new ReactionNewTweet();
     /*
     ** The three following methods / attributes can be use to pass Object between different view
     * ex : Object => information User : UserInfo user;
@@ -79,25 +74,40 @@ public class NavigatorUI extends UI {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
-        ServletContext ctx = VaadinServlet.getCurrent().getServletContext();
-        StdSchedulerFactory factory = (StdSchedulerFactory) ctx.getAttribute("org.quartz.impl.StdSchedulerFactory.KEY");
-        try {
-            Scheduler scheduler = factory.getScheduler("LenartScheduler");
-            if (scheduler != null) {
-                JobDetail jobDetail =
-                        newJob(MainJob.class).storeDurably().withIdentity("MAIN_JOB").withDescription("Main Job to Perform")
-                                .build();
-
-                Trigger trigger =
-                        newTrigger().forJob(jobDetail).withIdentity("MAIN_JOB_TRIGG").withDescription("Trigger for Main Job")
-                                .withSchedule(simpleSchedule().withIntervalInSeconds(60).repeatForever()).startNow().build();
-
-                scheduler.scheduleJob(jobDetail, trigger);
+        java.util.Timer t = new java.util.Timer();
+        t.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (Twitter.getIsLoged()) {
+                    if (action.hasHappened()) {
+                        System.out.println("Something happened");
+                        for (JSONObject object : action.getWhatHappened()) {
+                            System.out.println("Executing");
+                            reaction.execute("", object);
+                        }
+                    }
+                }
             }
-        } catch (SchedulerException e) {
-            e.printStackTrace();
-        }
+        }, 10000, 10000);
+//
+//        ServletContext ctx = VaadinServlet.getCurrent().getServletContext();
+//        StdSchedulerFactory factory = (StdSchedulerFactory) ctx.getAttribute("org.quartz.impl.StdSchedulerFactory.KEY");
+//        try {
+//            Scheduler scheduler = factory.getScheduler("LenartScheduler");
+//            if (scheduler != null) {
+//                JobDetail jobDetail =
+//                        newJob(MainJob.class).storeDurably().withIdentity("MAIN_JOB").withDescription("Main Job to Perform")
+//                                .build();
+//
+//                Trigger trigger =
+//                        newTrigger().forJob(jobDetail).withIdentity("MAIN_JOB_TRIGG").withDescription("Trigger for Main Job")
+//                                .withSchedule(simpleSchedule().withIntervalInSeconds(60).repeatForever()).startNow().build();
+//
+//                scheduler.scheduleJob(jobDetail, trigger);
+//            }
+//        } catch (SchedulerException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)

@@ -1,36 +1,27 @@
 package eu.epitech;
 
-import java.io.IOException;
-
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.builder.api.DefaultApi10a;
 import com.github.scribejava.core.builder.api.DefaultApi20;
-import com.github.scribejava.core.model.OAuth1AccessToken;
-import com.github.scribejava.core.model.OAuth2AccessToken;
-import com.github.scribejava.core.model.OAuthRequest;
-import com.github.scribejava.core.model.Response;
-import com.github.scribejava.core.model.Token;
-import com.github.scribejava.core.model.Verb;
+import com.github.scribejava.core.model.*;
 import com.github.scribejava.core.oauth.OAuth10aService;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import com.github.scribejava.core.oauth.OAuthService;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.TextArea;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
 import eu.epitech.API.ApiInfo;
 
+import java.io.IOException;
+
 @SuppressWarnings("serial")
-class GetTestComponent extends Panel {
+public class GetTestComponent extends Panel {
 
 	private final VerticalLayout layout = new VerticalLayout();
 	private final Token accessToken;
 	private final ApiInfo service;
 	private TextArea responseArea;
 
-	GetTestComponent(ApiInfo service, Token accessToken) {
+	public GetTestComponent(ApiInfo service, Token accessToken) {
 		setSizeFull();
 
 		setContent(layout);
@@ -83,3 +74,4 @@ class GetTestComponent extends Panel {
 		}
 	}
 }
+

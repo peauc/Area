@@ -55,12 +55,12 @@ public class CreateAccountView extends AbsoluteLayout implements View {
         }
         else {
             // Check if the Username already exist
-            if () {
-
-            } else {
-                // Fill object UserInfo, with the username : username && the password associated : password
-                getUI().getNavigator().navigateTo("login");
-            }
+//            if () {
+//
+//            } else {
+//                // Fill object UserInfo, with the username : username && the password associated : password
+//                getUI().getNavigator().navigateTo("login");
+//            }
         }
     }
 

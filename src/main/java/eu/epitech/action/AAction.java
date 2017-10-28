@@ -83,7 +83,7 @@ public abstract class AAction implements IAction {
 	}
 
 	public void setPreviousDatas(JSONObject previousDatas) {
-		this.previousDatas = previousDatas;
+    	this.previousDatas = previousDatas;
 	}
 
     @Override

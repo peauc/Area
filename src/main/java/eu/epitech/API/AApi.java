@@ -7,7 +7,6 @@ import com.github.scribejava.core.model.*;
 import com.github.scribejava.core.oauth.OAuth10aService;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import com.github.scribejava.core.oauth.OAuthService;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -76,7 +75,7 @@ public abstract class AApi {
         }
     }
 
-    public static String send(String URL, Verb mode) throws IOException {
+    public static String send(String URL, Verb mode, Token token) throws IOException {
         if (getoAuthService() == null || getToken() == null) {
             System.out.println("send returning null");
             return null;
@@ -87,12 +86,11 @@ public abstract class AApi {
         } else {
             ((OAuth10aService) getoAuthService()).signRequest((OAuth1AccessToken)getToken(), request);
         }
+
         Response resp = request.send();
-        try {
-            return (resp.getBody());
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            return (resp.getBody());
+        if (resp == null || (resp.getCode() > 400 && resp.getCode() < 500) || resp.getCode() == 88) {
+            return (null);
         }
+        return (resp.getBody());
     }
 }
