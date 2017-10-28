@@ -1,5 +1,7 @@
 package eu.epitech;
 
+import eu.epitech.API.ApiUtils;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -55,9 +57,8 @@ public class User {
 	 * Will update a token's value if it finds one belonging to the user
 	 * @param dbm
 	 * @param apiName
-	 * @param token
 	 */
-	public void addTokenToDatabase(DatabaseManager dbm, ApiUtils.Name apiName, String token) {
+	public void addTokenToDatabase(DatabaseManager dbm, ApiUtils.Name apiName) {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		int userId;
@@ -75,13 +76,13 @@ public class User {
 					pstmt = dbm.getConnection().prepareStatement("INSERT INTO token(fk_token_user, api_name, value) VALUES (?, ?, ?)");
 					pstmt.setInt(1, userId);
 					pstmt.setString(2, apiName.name());
-					pstmt.setString(3, token);
+					pstmt.setString(3, this.idTokens.get(apiName));
 					pstmt.executeUpdate();
 				} else { // token already set -> update it's value
 					logId = rs.getInt("id");
 					pstmt.close();
 					pstmt = dbm.getConnection().prepareStatement("UPDATE token SET value = ? WHERE id = ?");
-					pstmt.setString(1, token);
+					pstmt.setString(1, this.idTokens.get(apiName));
 					pstmt.setInt(2, logId);
 					pstmt.executeUpdate();
 				}
@@ -154,6 +155,10 @@ public class User {
 			}
 		}
 		return (userId);
+	}
+
+	public void setIdToken(ApiUtils.Name api, String value) {
+		this.idTokens.put(api, value);
 	}
 
 	public void removeIdToken(ApiUtils.Name api) {

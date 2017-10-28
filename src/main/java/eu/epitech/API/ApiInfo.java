@@ -1,4 +1,4 @@
-package eu.epitech;
+package eu.epitech.API;
 
 public class ApiInfo {
 

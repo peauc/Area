@@ -1,12 +1,14 @@
-package eu.epitech;
+package eu.epitech.reaction;
 
+import eu.epitech.Area;
+import eu.epitech.DatabaseManager;
+import eu.epitech.FieldType;
 import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
 
 public interface IReaction {
-
     void execute(String token, JSONObject actionOutput);
 
     boolean isExecutable(List<String> fields);

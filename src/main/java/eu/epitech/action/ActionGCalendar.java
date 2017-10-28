@@ -1,5 +1,5 @@
 
-package eu.epitech;
+package eu.epitech.action;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -19,6 +19,8 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import eu.epitech.API.ApiUtils;
+import eu.epitech.FieldType;
 import org.json.JSONObject;
 import org.pmw.tinylog.Logger;
 
@@ -28,12 +30,10 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class ActionGCalendar extends AAction {
+
     private String lastSyncToken = null;
     private DateTime lastSyncDate = null;
     private ArrayList<JSONObject> eventsStore = new ArrayList<>();
-    private static List<String> fields = ImmutableList.of(
-            "start", "timezone", "end", "creator", "description", "location", "summary");
-    static private Map<String, FieldType> requiredConfigFields = ImmutableMap.of("email", FieldType.EMAIL);
 
     // Application Name
     private static final String APPLICATION_NAME = "THE AREA";
@@ -66,6 +66,24 @@ public class ActionGCalendar extends AAction {
             t.printStackTrace();
             System.exit(1);
         }
+    }
+
+    public ActionGCalendar() {
+        this.api = ApiUtils.Name.FACEBOOK;
+        this.name = "GOOGLE CALENDAR : on event creation";
+        this.description = "Activates when someone creates a new event on Google Calendar";
+        this.fields = new ArrayList<>();
+        this.fields.add("start");
+        this.fields.add("timezone");
+        this.fields.add("end");
+        this.fields.add("creator");
+        this.fields.add("description");
+        this.fields.add("location");
+        this.fields.add("summary");
+        this.requiredConfigFields = new HashMap<>();
+        this.requiredConfigFields.put("email", FieldType.EMAIL);
+        this.config = null;
+        this.previousDatas = null;
     }
 
     /**

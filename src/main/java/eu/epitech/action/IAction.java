@@ -1,5 +1,9 @@
-package eu.epitech;
+package eu.epitech.action;
 
+import elemental.json.Json;
+import eu.epitech.Area;
+import eu.epitech.DatabaseManager;
+import eu.epitech.FieldType;
 import org.json.JSONObject;
 
 import java.util.List;

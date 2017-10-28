@@ -1,5 +1,9 @@
-package eu.epitech;
+package eu.epitech.reaction;
 
+import eu.epitech.API.ApiUtils;
+import eu.epitech.Area;
+import eu.epitech.DatabaseManager;
+import eu.epitech.FieldType;
 import org.json.JSONObject;
 
 import java.sql.PreparedStatement;
@@ -11,25 +15,14 @@ import java.util.Map;
 public abstract class AReaction implements IReaction {
 	protected ApiUtils.Name api;
     protected String name;
+
     protected String description;
     protected JSONObject config = null;
 	protected List<String> requiredActionFields = null;
 	protected Map<String, FieldType> requiredConfigFields = null;
 
-	/**
-	 * Every reaction must call this contructor.
-	 * @param apiName
-	 * @param reactionName
-	 * @param description
-	 * @param requiredActionFields
-	 * @param requiredConfigFields
-	 */
-	public AReaction(ApiUtils.Name apiName, String reactionName, String description, List<String> requiredActionFields, Map<String, FieldType> requiredConfigFields) {
-		this.api = apiName;
-		this.name = reactionName;
-		this.description = description;
-		this.requiredActionFields = requiredActionFields;
-		this.requiredConfigFields = requiredConfigFields;
+	public AReaction() {
+
 	}
 
 	public ApiUtils.Name getApi() {
@@ -72,15 +65,16 @@ public abstract class AReaction implements IReaction {
 			if (areaId == -1) // area not found
 				return;
 			if ((reactionId = this.getDbId(dbm, area)) == -1) { // action not found -> create a new db entry
-				pstmt = dbm.getConnection().prepareStatement("INSERT INTO reaction(fk_reaction_area, name, description, config) VALUES (?, ?, ?, ?)");
+				pstmt = dbm.getConnection().prepareStatement("INSERT INTO reaction(fk_reaction_area, api_name, name, description, config) VALUES (?, ?, ?, ?, ?)");
 				pstmt.setInt(1, areaId);
-				pstmt.setString(2, this.name);
-				pstmt.setString(3, this.description);
-				pstmt.setString(4, this.config.toString());
+				pstmt.setString(2, this.api.name());
+				pstmt.setString(3, this.name);
+				pstmt.setString(4, this.description);
+				pstmt.setString(5, (this.config != null) ? this.config.toString() : null);
 				pstmt.executeUpdate();
 			} else { // action found -> update config
 				pstmt = dbm.getConnection().prepareStatement("UPDATE action SET config = ? WHERE fk_action_area = ?");
-				pstmt.setString(1, this.config.toString());
+				pstmt.setString(1, (this.config != null) ? this.config.toString() : null);
 				pstmt.setInt(2, reactionId);
 				pstmt.executeUpdate();
 			}
@@ -107,7 +101,7 @@ public abstract class AReaction implements IReaction {
 	public void removeFromDatabase(DatabaseManager dbm, Area area) {
 		PreparedStatement pstmt = null;
 		int reactionId = -1;
-		
+
 		try {
 			if ((reactionId = this.getDbId(dbm, area)) == -1)
 				return;
