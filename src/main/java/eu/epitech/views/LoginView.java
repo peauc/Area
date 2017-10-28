@@ -69,22 +69,23 @@ public class LoginView extends AbsoluteLayout implements View {
     public void testBadPassword() {
         User user;
 
-        if (username.getValue().equals("") ||
-                password.getValue().equals(""))
-        {
+        if (dbm == null || dbm.getConnection() == null) {
+            if (!labelTmp.getValue().equals("Error : Cannot access database")) {
+                labelTmp.setCaption("Error : Cannot access database");
+                addComponent(labelTmp, "top: 350px; left: 50px;");
+            }
+        } else if (username.getValue().equals("") ||
+                password.getValue().equals("")) {
             if (getComponentCount() > countObject)
                 removeComponent(labelTmp);
             labelTmp.setCaption("Please Username or password missing");
-            addComponent(labelTmp, "top: 275px; left: 50px;");
-        }
-        else if ((user = dbm.retrieveUserFromDatabase(username.getValue(), password.getValue())) == null) { // Condition to test, is the username exist on the DB, and if the password is good
+            addComponent(labelTmp, "top: 350px; left: 50px;");
+        } else if ((user = dbm.retrieveUserFromDatabase(username.getValue(), password.getValue())) == null) { // Condition to test, is the username exist on the DB, and if the password is good
             if (getComponentCount() > countObject)
                 removeComponent(labelTmp);
             labelTmp.setCaption("The username or password is incorrect");
-            addComponent(labelTmp, "top: 275px; left: 50px;");
-        }
-        else
-        {
+            addComponent(labelTmp, "top: 350px; left: 50px;");
+        } else {
             NavigatorUI.putData(getUI(), new Stock(user, null, null, null));
             getUI().getNavigator().navigateTo("action");
         }
@@ -106,6 +107,13 @@ public class LoginView extends AbsoluteLayout implements View {
         Button button = new Button("Create Account", new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
+                if (dbm == null || dbm.getConnection() == null) {
+                    if (!labelTmp.getValue().equals("Error : Cannot access database")) {
+                        labelTmp.setCaption("Error : Cannot access database");
+                        addComponent(labelTmp, "top: 350px; left: 50px;");
+                    }
+                    return;
+                }
                 NavigatorUI.putData(getUI(), new Stock(null, null, null, null));
                 getUI().getNavigator().navigateTo("account");
             }
