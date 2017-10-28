@@ -5,7 +5,6 @@ import com.vaadin.annotations.DesignRoot;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
-import eu.epitech.DatabaseManager;
 import eu.epitech.NavigatorUI;
 import eu.epitech.Stock;
 import eu.epitech.User;
@@ -83,12 +82,6 @@ public class CreateAccountView extends AbsoluteLayout implements View {
     }
 
     private Button confirmButton() {
-        Button button = new Button("Confirm", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                testCreationAccount();
-            }
-        });
-        return button;
+        return new Button("Confirm", (Button.ClickListener) clickEvent -> testCreationAccount());
     }
 }

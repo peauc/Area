@@ -26,7 +26,7 @@ public class ActionGCalendar extends AAction {
 
     public ActionGCalendar() {
         this.api = ApiUtils.Name.GOOGLE_CALENDAR;
-        this.name = "GOOGLE CALENDAR : on event creation";
+        this.name = "GOOGLE CALENDAR : On event creation";
         this.description = "Activates when someone creates a new event on Google Calendar";
         this.fields = new ArrayList<>();
         this.fields.add("start");
