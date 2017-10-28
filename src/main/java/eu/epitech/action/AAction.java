@@ -1,5 +1,6 @@
 package eu.epitech.action;
 
+import eu.epitech.API.AApi;
 import eu.epitech.API.ApiUtils;
 import eu.epitech.Area;
 import eu.epitech.DatabaseManager;
@@ -22,7 +23,6 @@ public abstract class AAction implements IAction {
     protected Map<String, FieldType> requiredConfigFields = null;
 
     public AAction() {
-
 	}
 
 	public ApiUtils.Name getApi() {

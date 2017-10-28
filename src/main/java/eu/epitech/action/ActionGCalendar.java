@@ -19,6 +19,7 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import eu.epitech.API.ApiGCalendar;
 import eu.epitech.API.ApiUtils;
 import eu.epitech.FieldType;
 import org.json.JSONObject;
@@ -30,46 +31,12 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class ActionGCalendar extends AAction {
-
     private String lastSyncToken = null;
     private DateTime lastSyncDate = null;
     private ArrayList<JSONObject> eventsStore = new ArrayList<>();
 
-    // Application Name
-    private static final String APPLICATION_NAME = "THE AREA";
-
-    // Directory to store user credentials for this application.
-    private static final java.io.File DATA_STORE_DIR = new java.io.File(
-            System.getProperty("user.dir"), ".credentials/calendar-java-quickstart");
-
-    // Global instance of the {@link FileDataStoreFactory}.
-    private static FileDataStoreFactory DATA_STORE_FACTORY;
-
-    // Global instance of the JSON factory.
-    private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-
-    // Global instance of the HTTP transport.
-    private static HttpTransport HTTP_TRANSPORT;
-
-    /** Global instance of the scopes required by this quickstart.
-     *
-     * If modifying these scopes, delete your previously saved credentials
-     * at ~/.credentials/calendar-java-quickstart
-     */
-    private static final List<String> SCOPES = Arrays.asList(CalendarScopes.CALENDAR_READONLY);
-
-    static {
-        try {
-            HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-            DATA_STORE_FACTORY = new FileDataStoreFactory(DATA_STORE_DIR);
-        } catch (Throwable t) {
-            t.printStackTrace();
-            System.exit(1);
-        }
-    }
-
     public ActionGCalendar() {
-        this.api = ApiUtils.Name.FACEBOOK;
+        this.api = ApiUtils.Name.GOOGLE_CALENDAR;
         this.name = "GOOGLE CALENDAR : on event creation";
         this.description = "Activates when someone creates a new event on Google Calendar";
         this.fields = new ArrayList<>();
@@ -84,40 +51,6 @@ public class ActionGCalendar extends AAction {
         this.requiredConfigFields.put("email", FieldType.EMAIL);
         this.config = null;
         this.previousDatas = null;
-    }
-
-    /**
-     * Creates an authorized Credential object.
-     * @return an authorized Credential object.
-     * @throws IOException
-     */
-    private static Credential authorize() throws IOException {
-        // Load client secrets.
-        InputStream in = ActionGCalendar.class.getResourceAsStream("/client_secret.json");
-        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
-
-        // Build flow and trigger user authorization request.
-        GoogleAuthorizationCodeFlow flow =  new GoogleAuthorizationCodeFlow.Builder(
-                HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-                .setDataStoreFactory(DATA_STORE_FACTORY)
-                .setAccessType("offline")
-                .build();
-        Credential credential =
-                new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
-        System.out.println("Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
-        return credential;
-    }
-
-    /**
-     * Build and return an authorized Calendar client service.
-     * @return an authorized Calendar client service
-     * @throws IOException
-     */
-    private static com.google.api.services.calendar.Calendar getCalendarService() throws IOException {
-        Credential credential = authorize();
-        return new com.google.api.services.calendar.Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
-                .setApplicationName(APPLICATION_NAME)
-                .build();
     }
 
     private Events fullSync(Calendar calendar) throws Exception {
@@ -168,7 +101,7 @@ public class ActionGCalendar extends AAction {
     private boolean process() {
         Calendar calendar;
         try {
-            calendar = getCalendarService();
+            calendar = ApiGCalendar.getCalendarService();
         } catch (Exception e) {
             Logger.error(e.getMessage());
             return false;
@@ -206,6 +139,9 @@ public class ActionGCalendar extends AAction {
         } while (pageToken != null);
 
         lastSyncToken = events.getNextSyncToken();
+
+
+
         return actionFound;
     }
 
