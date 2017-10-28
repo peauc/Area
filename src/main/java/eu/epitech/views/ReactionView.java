@@ -30,7 +30,6 @@ import java.util.ArrayList;
 public class ReactionView extends AbsoluteLayout implements View {
     private ArrayList<Button> reactionsButton = new ArrayList<>();
     private String titleAction;
-    private int nbReaction = 1;
     private User user = null;
     private AAction action = null;
 
@@ -43,7 +42,6 @@ public class ReactionView extends AbsoluteLayout implements View {
         int maxHeight = (ApiUtils.availableReactions.size() + 10) * 100;
         setWidth("1000px");
         setHeight(Integer.toString(maxHeight) + "px");
-        int high = 50;
         for (AReaction reaction : ApiUtils.availableReactions) {
             reactionsButton.add(reactionButton(reaction.getName()));
         }
