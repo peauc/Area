@@ -1,7 +1,5 @@
 package eu.epitech;
 
-import javax.servlet.annotation.WebServlet;
-
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -10,14 +8,16 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import eu.epitech.views.*;
+import org.pmw.tinylog.Logger;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.impl.StdSchedulerFactory;
-import eu.epitech.views.*;
 
 import javax.servlet.ServletContext;
+import javax.servlet.annotation.WebServlet;
 
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
@@ -73,8 +73,10 @@ public class NavigatorUI extends UI {
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         final VerticalLayout layout = new VerticalLayout();
+
         layout.setMargin(true);
         setContent(layout);
+
         Navigator.ComponentContainerViewDisplay viewDisplay = new Navigator.ComponentContainerViewDisplay(layout);
         navigator = new Navigator(UI.getCurrent(),viewDisplay);
 
@@ -87,7 +89,9 @@ public class NavigatorUI extends UI {
             navigator.addView("account", new CreateAccountView());
             navigator.addView("login", new LoginView());
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            Logger.error("Error occurred during views creation");
+            Logger.debug(e.getMessage());
+            Logger.debug(e.getCause());
         }
 
         ServletContext ctx = VaadinServlet.getCurrent().getServletContext();
@@ -105,7 +109,10 @@ public class NavigatorUI extends UI {
 
                 scheduler.scheduleJob(jobDetail, trigger);
             }
-        } catch (SchedulerException ignored) {
+        } catch (SchedulerException e) {
+            Logger.error("Error occurred during Schedule configuration");
+            Logger.debug(e.getMessage());
+            Logger.debug(e.getCause());
         }
     }
 

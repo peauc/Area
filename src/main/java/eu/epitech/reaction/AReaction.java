@@ -15,7 +15,6 @@ import java.util.Map;
 public abstract class AReaction implements IReaction {
 	protected ApiUtils.Name api;
     protected String name;
-
     protected String description;
     protected JSONObject config = null;
 	protected List<String> requiredActionFields = null;
@@ -165,11 +164,26 @@ public abstract class AReaction implements IReaction {
 		return this.getDbId(dbm, area.getDbId(dbm));
 	}
 
-    @Override
-    public abstract void execute(String token, JSONObject actionOutput);
+	@Override
+	public boolean isExecutable(List<String> fields) {
+		for (String requiredField : requiredActionFields) {
+			if (fields.indexOf(requiredField) == -1)
+				return false;
+		}
+		return true;
+	}
 
-    @Override
-    public abstract boolean isExecutable(List<String> fields);
+	@Override
+	public List<String> requiredFields() {
+		return requiredActionFields;
+	}
+
+	@Override
+	public Map<String, FieldType> configFields() {
+		return requiredConfigFields;
+	}
+
+
 
 	@Override
 	public boolean setConfig(JSONObject conf) {
