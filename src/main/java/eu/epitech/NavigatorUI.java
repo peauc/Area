@@ -15,7 +15,7 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.impl.StdSchedulerFactory;
-import views.*;
+import eu.epitech.views.*;
 
 import javax.servlet.ServletContext;
 
