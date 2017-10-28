@@ -10,7 +10,7 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
-import com.google.api.services.calendar.CalendarScopes;
+import com.google.api.services.gmail.GmailScopes;
 import org.pmw.tinylog.Logger;
 
 import java.io.IOException;
@@ -19,13 +19,13 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 
-public class ApiGCalendar extends AApi {
+public class ApiGGmail extends AApi {
     // Application Name
     private static final String APPLICATION_NAME = "the_area";
 
     // Directory to store user credentials for this application.
     private static final java.io.File DATA_STORE_DIR = new java.io.File(
-            System.getProperty("user.dir"), "./.calendar/credentials/the_area");
+            System.getProperty("user.dir"), "./.gmail/credentials/the_area");
 
     // Global instance of the {@link FileDataStoreFactory}.
     private static FileDataStoreFactory DATA_STORE_FACTORY;
@@ -39,9 +39,9 @@ public class ApiGCalendar extends AApi {
     /** Global instance of the scopes required by this quickstart.
      *
      * If modifying these scopes, delete your previously saved credentials
-     * at ~/./.calendar/credentials/the_area
+     * at ~/.gmail/credentials/the_area
      */
-    private static final List<String> SCOPES = Arrays.asList(CalendarScopes.CALENDAR);
+    private static final List<String> SCOPES = Arrays.asList(GmailScopes.MAIL_GOOGLE_COM);
 
 
     /**
@@ -51,7 +51,7 @@ public class ApiGCalendar extends AApi {
      */
     private static Credential authorize() throws IOException {
         // Load client secrets.
-        InputStream in = ApiGCalendar.class.getResourceAsStream("/calendar/client_secret.json");
+        InputStream in = ApiGGmail.class.getResourceAsStream("./gmail/client_secret.json");
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
         // Build flow and trigger user authorization request.
@@ -67,13 +67,13 @@ public class ApiGCalendar extends AApi {
     }
 
     /**
-     * Build and return an authorized Calendar client service.
-     * @return an authorized Calendar client service
+     * Build and return an authorized Gmail client service.
+     * @return an authorized Gmail client service
      * @throws IOException
      */
-    public static com.google.api.services.calendar.Calendar getCalendarService() throws IOException {
+    public static com.google.api.services.gmail.Gmail getGmailService() throws IOException {
         Credential credential = authorize();
-        return new com.google.api.services.calendar.Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+        return new com.google.api.services.gmail.Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
                 .setApplicationName(APPLICATION_NAME)
                 .build();
     }
@@ -83,7 +83,7 @@ public class ApiGCalendar extends AApi {
             HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
             DATA_STORE_FACTORY = new FileDataStoreFactory(DATA_STORE_DIR);
         } catch (Throwable t) {
-            Logger.error("Google Calendar API Initialization error");
+            Logger.error("Google Gmail API Initialization error");
             Logger.debug(t);
         }
     }

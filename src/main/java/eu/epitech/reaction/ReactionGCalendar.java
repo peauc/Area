@@ -19,7 +19,6 @@ import java.util.List;
 
 
 public class ReactionGCalendar extends AReaction {
-
     public ReactionGCalendar() {
         this.api = ApiUtils.Name.GOOGLE_CALENDAR;
         this.name = "GOOGLE CALENDAR : Create an event";
