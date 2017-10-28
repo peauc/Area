@@ -67,7 +67,7 @@ public class DemoLayout extends VerticalLayout {
 				"https://api.twitter.com/1.1/statuses/lookup");
 		OAuthPopupButton button = new TwitterButton(api.apiKey, api.apiSecret);
 		addComponent(button);
-		 addButton(api, button);
+		addButton(api, button);
 		button.addOAuthListener(new OAuthListener() {
 			@Override
 			public void authSuccessful(Token token, boolean isOAuth20) {

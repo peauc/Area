@@ -2,6 +2,7 @@ package eu.epitech;
 
 import javax.servlet.annotation.WebServlet;
 
+import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.navigator.Navigator;
@@ -18,9 +19,35 @@ import com.vaadin.ui.VerticalLayout;
  * overridden to add component to the user interface and initialize non-component functionality.
  */
 
+@Push
 @Theme("mytheme")
 public class NavigatorUI extends UI {
     public Navigator navigator;
+
+    /*
+    ** The three following methods / attributes can be use to pass Object between different view
+    * ex : Object => information User : UserInfo user;
+    * pudData(getUI(), user);
+    * getUI().getNavigator().navigateTO(view);
+    * 
+    * Then in the other view, on the Override enter methods:
+    *     public void enter(ViewChangeListener.ViewChangeEvent event) {
+    *           Object obj = readData(getUI());
+    *       }
+     */
+    private static final String TEMPORARY_VARIABLE = "temp";
+
+    public static void putData(com.vaadin.ui.UI ui, Object object)
+    {
+        ui.getSession().setAttribute(TEMPORARY_VARIABLE, object);
+    }
+
+    public static Object readData(com.vaadin.ui.UI ui)
+    {
+        Object object = ui.getSession().getAttribute(TEMPORARY_VARIABLE);
+        ui.getSession().setAttribute(TEMPORARY_VARIABLE, null);
+        return object;
+    }
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {

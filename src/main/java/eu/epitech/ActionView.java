@@ -24,11 +24,13 @@ import java.util.ArrayList;
 @SuppressWarnings("serial")
 public class ActionView extends VerticalLayout implements View {
         private ArrayList<Button> actionsButton = new ArrayList<Button>();
+        private int nbAction = 0;
 
+        // Set in Action View the nbAction attribute by set it with the current nbAction we have
     public ActionView() {
         setSizeFull();
         setSpacing(true);
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < nbAction; ++i) {
             actionsButton.add(actionButton("Description"));
         }
         for (Button button : actionsButton) {
@@ -41,10 +43,15 @@ public class ActionView extends VerticalLayout implements View {
         Notification.show("Welcome to action page !");
     }
 
+    /*
+    ** The String txt correspond to the name of the action. You can add a second parameters which will can be
+    * the description of the action. In this case, append this parameters to 'txt' into the Button constructor.
+     */
     private Button actionButton(String txt) {
         Button button = new Button(txt, new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
+                //txt is passing in parameters on the next view
                 getUI().getNavigator().navigateTo("reaction" + "/" + txt);
             }
         });

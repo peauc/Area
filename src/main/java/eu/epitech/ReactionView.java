@@ -26,15 +26,24 @@ import java.util.ArrayList;
 public class ReactionView extends AbsoluteLayout implements View {
     private ArrayList<Button> reactionsButton = new ArrayList<Button>();
     private String titleAction;
+    private int nbReaction = 0;
 
+    /*
+    *  With the action passing in this view, set in the ReactionView constructor the nb of reaction linked
+    *  to the actual action.
+     */
     public ReactionView() {
         setSizeFull();
+        int maxHeight = (nbReaction + 10) * 100;
         setWidth("2000px");
-        setHeight("2000px");
+        setHeight(Integer.toString(maxHeight) + "px");
         int high = 50;
-        for (int i = 0; i < 5; ++i)
+        for (int i = 0; i < nbReaction; ++i)
         {
-            reactionsButton.add(reactionButton("Inhuman reaction"));
+            // Set the name of the Reaction, and if you want a description of this.
+            String nameReaction = "";
+            String descReaction = "";
+            reactionsButton.add(reactionButton(nameReaction));
         }
         for (Button button : reactionsButton) {
             addComponent(button, "top: " + Integer.toString(high) + "px; left: 1500px;");
@@ -42,6 +51,9 @@ public class ReactionView extends AbsoluteLayout implements View {
         }
     }
 
+    /*
+    * Here we're setting the big action button corresponding to the txt passing in parameters to this view
+     */
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         if (event.getParameters() != null)
@@ -66,10 +78,18 @@ public class ReactionView extends AbsoluteLayout implements View {
         return button;
     }
 
+    /*
+    ** The String txt correspond to the name of the reaction. You can add a second parameters which will can be
+    * the description of the reaction. In this case, append this parameters to 'txt' into the Button constructor.
+     */
     private Button reactionButton(String txt) {
         Button button = new Button(txt, new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
+                /*  We're passing in parameters to the next view the action linked to the reaction.
+                *   Here we can pass the specific object Config with the specific methods situated in NavigatorView
+                *   to the next view.
+                */
               getUI().getNavigator().navigateTo("config" + "/" + titleAction + "-" + txt);
             }
         });

@@ -25,8 +25,10 @@ import com.vaadin.ui.themes.ValoTheme;
 public class LoginView extends AbsoluteLayout implements View {
     private TextField username = new TextField("Username");
     private TextField password = new TextField("Password");
-    private Button account = new Button();
     private Label labelTmp = new Label();
+
+    // Count nb of object on the View
+    private int countObject = 5;
 
     public LoginView() {
         setSizeFull();
@@ -37,6 +39,7 @@ public class LoginView extends AbsoluteLayout implements View {
         addComponent(password, "left: 50px; top: 150px;");
         addComponent(loginButton(), "left: 75px; top: 200px;");
         addComponent(accountButton(), "left: 35px; top: 300px;");
+        addComponent(new DemoLayout(), "left: 50px; top: 350px;");
         setResponsive(true);
     }
 
@@ -45,11 +48,20 @@ public class LoginView extends AbsoluteLayout implements View {
         System.out.println("Enter in loginView");
     }
 
+    /*
+    ** Test if user have set a valid username, and the good password associate
+     */
     public void testBadPassword() {
         if (username.getValue().equals("") ||
                 password.getValue().equals(""))
         {
-            if (getComponentCount() > 4)
+            if (getComponentCount() > countObject)
+                removeComponent(labelTmp);
+            labelTmp.setCaption("Please Username or password missing");
+            addComponent(labelTmp, "top: 275px; left: 50px;");
+        }
+        else if () { // Condition to test, is the username exist on the DB, and if the password is good
+            if (getComponentCount() > countObject)
                 removeComponent(labelTmp);
             labelTmp.setCaption("The username or password is incorrect");
             addComponent(labelTmp, "top: 275px; left: 50px;");
