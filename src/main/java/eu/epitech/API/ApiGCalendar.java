@@ -25,7 +25,7 @@ public class ApiGCalendar extends AApi {
 
     // Directory to store user credentials for this application.
     private static final java.io.File DATA_STORE_DIR = new java.io.File(
-            System.getProperty("user.dir"), "./.calendar/credentials/the_area");
+            System.getProperty("user.dir"), "./.calendar/credentials");
 
     // Global instance of the {@link FileDataStoreFactory}.
     private static FileDataStoreFactory DATA_STORE_FACTORY;
@@ -51,7 +51,7 @@ public class ApiGCalendar extends AApi {
      */
     private static Credential authorize() throws IOException {
         // Load client secrets.
-        InputStream in = ApiGCalendar.class.getResourceAsStream("/calendar/client_secret.json");
+        InputStream in = ApiGCalendar.class.getResourceAsStream("./.calendar/calendar_secret.json");
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
         // Build flow and trigger user authorization request.

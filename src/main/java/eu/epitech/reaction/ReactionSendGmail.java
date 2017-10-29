@@ -3,9 +3,11 @@ package eu.epitech.reaction;
 import com.google.api.client.util.Base64;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.Message;
+import eu.epitech.API.ApiGGmail;
 import eu.epitech.API.ApiUtils;
 import eu.epitech.FieldType;
 import org.json.JSONObject;
+import org.pmw.tinylog.Logger;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -24,8 +26,8 @@ public class ReactionSendGmail extends AReaction {
         this.name = "GOOGLE CALENDAR : Create an event";
         this.description = "Create a new event in the associated Calendar account";
         this.requiredActionFields = new ArrayList<>();
-        this.requiredActionFields.add("start");
-        this.requiredActionFields.add("end");
+        this.requiredActionFields.add("subject");
+        this.requiredActionFields.add("bodyText");
         this.requiredConfigFields = new HashMap<>();
         this.requiredConfigFields.put("email", FieldType.EMAIL);
         this.config = null;
@@ -94,5 +96,18 @@ public class ReactionSendGmail extends AReaction {
     @Override
     public void execute(String token, JSONObject actionOutput) {
 
+        try {
+            MimeMessage message = createEmail(config.getString("email"),
+                    "java.area.epitech@gmail.com",
+                    actionOutput.getString("subject"),
+                    actionOutput.getString("bodyText"));
+            sendMessage(ApiGGmail.getGmailService(), "me", message);
+        } catch (MessagingException e) {
+            Logger.error("Error occurred during Mime message creation");
+            Logger.debug(e);
+        } catch (IOException e) {
+            Logger.error("Error occurred during Mail creation");
+            Logger.debug(e);
+        }
     }
 }
