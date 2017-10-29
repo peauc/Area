@@ -1,6 +1,7 @@
 package eu.epitech.action;
 
 import elemental.json.Json;
+import eu.epitech.API.ApiUtils;
 import eu.epitech.Area;
 import eu.epitech.DatabaseManager;
 import eu.epitech.FieldType;
@@ -11,7 +12,7 @@ import java.util.Map;
 
 public interface IAction {
 
-    boolean hasHappened();
+    boolean hasHappened(Map<ApiUtils.Name, String> tokens);
 
     List<JSONObject> whatHappened();
 

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.lang.System.out;
+import static java.lang.System.setOut;
 
 
 public class MainJob implements Job {
@@ -46,7 +47,8 @@ public class MainJob implements Job {
 						System.out.println("        Name : " + area.getReaction().getName());
 						System.out.println("        Description : " + area.getReaction().getDescription());
 
-						if (area.getAction().hasHappened()) { // Checks if action has been triggered
+						if (area.getAction().hasHappened(user.getIdTokens())) { // Checks if action has been triggered
+							System.out.println("HAS HAPPENED ! GONNA SPAM BROUT !");
 							List<JSONObject> events = area.getAction().whatHappened();
 							if (events != null) {
 								for (JSONObject event : events) {
