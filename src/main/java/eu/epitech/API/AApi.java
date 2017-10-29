@@ -63,28 +63,29 @@ public abstract class AApi {
         AApi.apiInfo = apiInfo;
     }
 
-    public static OAuthService createOAuthService() {
+    public static OAuthService createOAuthService(ApiInfo info) {
         ServiceBuilder sb = new ServiceBuilder().
-                apiKey(apiInfo.apiKey).
-                apiSecret(apiInfo.apiSecret).
-                callback(apiInfo.exampleGetRequest);
-        if (apiInfo.scribeApi instanceof DefaultApi10a) {
-            return sb.build((DefaultApi10a) apiInfo.scribeApi);
+                apiKey(info.apiKey).
+                apiSecret(info.apiSecret).
+                callback(info.exampleGetRequest);
+        if (info.scribeApi instanceof DefaultApi10a) {
+            return sb.build((DefaultApi10a) info.scribeApi);
         } else {
-            return sb.build((DefaultApi20) apiInfo.scribeApi);
+            return sb.build((DefaultApi20) info.scribeApi);
         }
     }
 
-    public static String send(String URL, Verb mode, Token token) throws IOException {
-        if (getoAuthService() == null || getToken() == null) {
+    public static String send(String URL, Verb mode, Token token, ApiInfo info) throws IOException {
+        if (info == null || token == null) {
             System.out.println("send returning null");
             return null;
         }
-        final OAuthRequest request = new OAuthRequest(mode, URL, getoAuthService());
+        OAuthService service = createOAuthService(info);
+        final OAuthRequest request = new OAuthRequest(mode, URL, service);
         if (getoAuthService() instanceof OAuth20Service) {
-            ((OAuth20Service) getoAuthService()).signRequest((OAuth2AccessToken)getToken(), request);
+            ((OAuth20Service) service).signRequest((OAuth2AccessToken)token, request);
         } else {
-            ((OAuth10aService) getoAuthService()).signRequest((OAuth1AccessToken)getToken(), request);
+            ((OAuth10aService) service).signRequest((OAuth1AccessToken)token, request);
         }
 
         Response resp = request.send();

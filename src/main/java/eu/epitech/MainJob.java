@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.lang.System.out;
+import static java.lang.System.setOut;
 
 
 public class MainJob implements Job {
@@ -46,15 +47,17 @@ public class MainJob implements Job {
 						System.out.println("        Name : " + area.getReaction().getName());
 						System.out.println("        Description : " + area.getReaction().getDescription());
 
-						if (area.getAction().hasHappened()) { // Checks if action has been triggered
+						if (area.getAction().hasHappened(user.getIdTokens())) { // Checks if action has been triggered
 							List<JSONObject> events = area.getAction().whatHappened();
 							if (events != null) {
 								for (JSONObject event : events) {
-									area.getReaction().execute(user.getIdToken(area.getReaction().getApi()), event);
+									area.getReaction().execute(user.getIdTokens(), event);
 								}
 							}
 						}
 					}
+					area.getAction().addToDatabase(NavigatorUI.dbm, area);
+					area.getReaction().addToDatabase(NavigatorUI.dbm, area);
 				}
 			}
 			out.println("Done executing job.");

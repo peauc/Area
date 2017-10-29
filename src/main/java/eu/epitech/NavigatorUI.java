@@ -8,11 +8,9 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import eu.epitech.API.Twitter;
 import eu.epitech.action.ActionNewTweet;
 import eu.epitech.reaction.ReactionNewTweet;
 import eu.epitech.views.*;
-import org.json.JSONObject;
 import org.pmw.tinylog.Logger;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -22,7 +20,6 @@ import org.quartz.impl.StdSchedulerFactory;
 
 import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebServlet;
-import java.util.TimerTask;
 
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
@@ -112,7 +109,7 @@ public class NavigatorUI extends UI {
 
                 Trigger trigger =
                         newTrigger().forJob(jobDetail).withIdentity("MAIN_JOB_TRIGG").withDescription("Trigger for Main Job")
-                                .withSchedule(simpleSchedule().withIntervalInSeconds(60).repeatForever()).startNow().build();
+                                .withSchedule(simpleSchedule().withIntervalInSeconds(5).repeatForever()).startNow().build();
 
                 scheduler.scheduleJob(jobDetail, trigger);
             }
@@ -121,40 +118,6 @@ public class NavigatorUI extends UI {
             Logger.debug(e.getMessage());
             Logger.debug(e.getCause());
         }
-        java.util.Timer t = new java.util.Timer();
-        t.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (Twitter.getIsLoged()) {
-                    if (action.hasHappened()) {
-                        System.out.println("Something happened");
-                        for (JSONObject object : action.getWhatHappened()) {
-                            System.out.println("Executing");
-                            reaction.execute("", object);
-                        }
-                    }
-                }
-            }
-        }, 10000, 10000);
-//
-//        ServletContext ctx = VaadinServlet.getCurrent().getServletContext();
-//        StdSchedulerFactory factory = (StdSchedulerFactory) ctx.getAttribute("org.quartz.impl.StdSchedulerFactory.KEY");
-//        try {
-//            Scheduler scheduler = factory.getScheduler("LenartScheduler");
-//            if (scheduler != null) {
-//                JobDetail jobDetail =
-//                        newJob(MainJob.class).storeDurably().withIdentity("MAIN_JOB").withDescription("Main Job to Perform")
-//                                .build();
-//
-//                Trigger trigger =
-//                        newTrigger().forJob(jobDetail).withIdentity("MAIN_JOB_TRIGG").withDescription("Trigger for Main Job")
-//                                .withSchedule(simpleSchedule().withIntervalInSeconds(60).repeatForever()).startNow().build();
-//
-//                scheduler.scheduleJob(jobDetail, trigger);
-//            }
-//        } catch (SchedulerException e) {
-//            e.printStackTrace();
-//        }
     }
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)

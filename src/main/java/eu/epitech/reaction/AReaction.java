@@ -165,7 +165,7 @@ public abstract class AReaction implements IReaction {
 	}
 
 	@Override
-	public boolean isExecutable(List<String> fields) {
+	public final boolean isExecutable(List<String> fields) {
 		for (String requiredField : requiredActionFields) {
 			if (fields.indexOf(requiredField) == -1)
 				return false;

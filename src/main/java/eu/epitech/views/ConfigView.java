@@ -8,6 +8,7 @@ import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
+import eu.epitech.API.ApiUtils;
 import eu.epitech.Area;
 import eu.epitech.NavigatorUI;
 import eu.epitech.Stock;
@@ -102,11 +103,15 @@ public class ConfigView extends AbsoluteLayout implements View {
         this.actionTf = new Label((this.action.configFields() != null && this.action.configFields().keySet().size() != 0) ? "Config Action" : "Nothing to config");
         this.reactionTf = new Label((this.reaction.configFields() != null && this.reaction.configFields().keySet().size() != 0) ? "Config Reaction" : "Nothing to config");
 
-        for (String field : this.action.configFields().keySet()) {
-            actionConfig.add(new TextField(field));
+        if (this.action.configFields() != null) {
+            for (String field : this.action.configFields().keySet()) {
+                actionConfig.add(new TextField(field));
+            }
         }
-        for (String field : this.reaction.configFields().keySet()) {
-            reactionConfig.add(new TextField(field));
+        if (this.reaction.getRequiredConfigFields() != null){
+            for (String field : this.reaction.configFields().keySet()) {
+                reactionConfig.add(new TextField(field));
+            }
         }
 
         addComponent(this.actionTf, "top: 150px; left: 50px");
@@ -122,7 +127,10 @@ public class ConfigView extends AbsoluteLayout implements View {
             addComponent(txt, "top: " + Integer.toString(reactionHeight) + "px; left: 400px;");
             reactionHeight += 100;
         }
-        addComponent(validateButton(), "top: " + Integer.toString((actionHeight > reactionHeight) ? actionHeight : reactionHeight) + "px; left: 200px;");
+        Button b = validateButton();
+        if (this.action.getApi() == ApiUtils.Name.TWITTER || this.reaction.getApi() == ApiUtils.Name.TWITTER)
+            ConnectionButtons.addTwitterButtons(user).extend(b);
+        addComponent(b, "top: " + Integer.toString((actionHeight > reactionHeight) ? actionHeight : reactionHeight) + "px; left: 200px;");
     }
 
     private Button validateButton() {

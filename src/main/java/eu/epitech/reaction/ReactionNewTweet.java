@@ -1,7 +1,9 @@
 package eu.epitech.reaction;
 
+import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.model.Verb;
 import com.google.api.client.util.ArrayMap;
+import eu.epitech.API.ApiInfo;
 import eu.epitech.API.ApiUtils;
 import eu.epitech.API.Twitter;
 import eu.epitech.Area;
@@ -19,14 +21,14 @@ public class ReactionNewTweet extends AReaction {
     private String handle;
     public ReactionNewTweet() {
         super();
-        setName("ReactionNewTweet");
+        this.api = ApiUtils.Name.TWITTER;
+        setName("TWITTER : On mention, send the same tweet");
         setDescription("Fire a new tweet with the text \"text\"");
         requiredActionFields = new ArrayList<>();
         requiredActionFields.add("text");
         requiredConfigFields = new ArrayMap<>();
+        requiredConfigFields.put("target", FieldType.STRING);
         config = new JSONObject();
-        config.put("target", "@Nova4u");
-        handle = Twitter.getHandle(Twitter.getToken());
     }
 
     @Override
@@ -90,10 +92,10 @@ public class ReactionNewTweet extends AReaction {
     }
 
     @Override
-    public void execute(String token, JSONObject actionOutput) {
-        if (Twitter.getIsLoged()) {
+    public void execute(Map<ApiUtils.Name, String> tokens, JSONObject actionOutput) {
+        if (tokens.get(ApiUtils.Name.TWITTER) != null) {
             if (handle == null)
-                handle = Twitter.getHandle(Twitter.getToken());
+                handle = Twitter.getHandle(new OAuth1AccessToken(tokens.get(ApiUtils.Name.TWITTER), tokens.get(ApiUtils.Name.TWITTER_SECRET)));
             String text = actionOutput.getString("text");
             System.out.println("Execute " + text);
             if (text != null) {
@@ -108,17 +110,12 @@ public class ReactionNewTweet extends AReaction {
                     text = text.replace("@"+handle, "");
                     System.err.println(text);
                     String URLEncodedString = URLEncoder.encode(string + text, "UTF-8");
-                    Twitter.send("https://api.twitter.com/1.1/statuses/update.json?status=" + URLEncodedString, Verb.POST, Twitter.getToken());
+                    Twitter.send("https://api.twitter.com/1.1/statuses/update.json?status=" + URLEncodedString, Verb.POST, new OAuth1AccessToken(tokens.get(ApiUtils.Name.TWITTER), tokens.get(ApiUtils.Name.TWITTER_SECRET)), ApiInfo.TwitterInfo);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
-    }
-
-    @Override
-    public boolean isExecutable(List<String> fields) {
-        return false;
     }
 
     @Override

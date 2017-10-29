@@ -16,9 +16,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
-public class ReactionGCalendar extends AReaction {
+public class
+ReactionGCalendar extends AReaction {
     public ReactionGCalendar() {
         this.api = ApiUtils.Name.GOOGLE_CALENDAR;
         this.name = "GOOGLE CALENDAR : Create an event";
@@ -106,7 +108,7 @@ public class ReactionGCalendar extends AReaction {
     }
 
     @Override
-    public void execute(String token, JSONObject actionOutput) {
+    public void execute(Map<ApiUtils.Name, String> tokens, JSONObject actionOutput) {
         Calendar calendar;
         try {
             calendar = ApiGCalendar.getCalendarService();

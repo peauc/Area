@@ -17,13 +17,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 
 public class ReactionSendGmail extends AReaction {
     public ReactionSendGmail() {
-        this.api = ApiUtils.Name.GOOGLE_CALENDAR;
-        this.name = "GOOGLE CALENDAR : Create an event";
+        this.api = ApiUtils.Name.GOOGLE_GMAIL;
+        this.name = "GOOGLE GMAIL : Send mail";
         this.description = "Create a new event in the associated Calendar account";
         this.requiredActionFields = new ArrayList<>();
         this.requiredActionFields.add("subject");
@@ -94,7 +95,7 @@ public class ReactionSendGmail extends AReaction {
     }
 
     @Override
-    public void execute(String token, JSONObject actionOutput) {
+    public void execute(Map<ApiUtils.Name, String> tokens, JSONObject actionOutput) {
 
         try {
             MimeMessage message = createEmail(config.getString("email"),

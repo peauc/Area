@@ -6,7 +6,6 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import eu.epitech.DemoLayout;
 import eu.epitech.NavigatorUI;
 import eu.epitech.Stock;
 import eu.epitech.User;
@@ -40,7 +39,6 @@ public class LoginView extends AbsoluteLayout implements View {
         addComponent(password, "left: 50px; top: 120px;");
         addComponent(loginButton(), "left: 100px; top: 190px;");
         addComponent(accountButton(), "left: 35px; top: 250px;");
-        addComponent(new DemoLayout(), "left: 50px; top: 350px;");
         setResponsive(true);
     }
 

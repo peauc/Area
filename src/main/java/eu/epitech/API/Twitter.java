@@ -11,7 +11,7 @@ public class Twitter extends AApi {
 
     public static String getHandle(Token token) {
         try {
-            String resp = send("https://api.twitter.com/1.1/account/settings.json", Verb.GET, token);
+            String resp = send("https://api.twitter.com/1.1/account/settings.json", Verb.GET, token, ApiInfo.TwitterInfo);
             if (resp == null)
                 return (null);
             System.err.println(resp);
