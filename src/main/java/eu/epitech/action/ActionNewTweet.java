@@ -31,6 +31,8 @@ public class ActionNewTweet extends AAction {
         setDescription("Fire whenever you are mentioned on twitter");
         this.fields = new ArrayList<>();
         this.fields.add("text");
+        this.fields.add("tweet");
+        this.config = new JSONObject();
     }
 
     public List<JSONObject> getWhatHappened() {
