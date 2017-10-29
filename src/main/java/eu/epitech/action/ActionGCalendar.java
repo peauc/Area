@@ -91,22 +91,26 @@ public class ActionGCalendar extends AAction {
         json.put("location", e.getLocation());
         json.put("summary", e.getSummary());
 
-        List<String> attendees = new ArrayList<>();
-        for (EventAttendee attendee : e.getAttendees()) {
-            attendees.add(attendee.getEmail());
+        if (e.getAttendees() != null && e.getAttendees().size() > 0) {
+            List<String> attendees = new ArrayList<>();
+            for (EventAttendee attendee : e.getAttendees()) {
+                attendees.add(attendee.getEmail());
+            }
+            json.put("attendees", attendees);
         }
-        json.put("attendees", attendees);
 
-        List<String> remindersMethods = new ArrayList<>();
-        List<Integer> remindersMinutes = new ArrayList<>();
-        for (EventReminder reminder : e.getReminders().getOverrides()) {
-            remindersMethods.add(reminder.getMethod());
-            remindersMinutes.add(reminder.getMinutes());
+        if (e.getReminders() != null && e.getReminders().getOverrides() != null) {
+            List<String> remindersMethods = new ArrayList<>();
+            List<Integer> remindersMinutes = new ArrayList<>();
+            for (EventReminder reminder : e.getReminders().getOverrides()) {
+                remindersMethods.add(reminder.getMethod());
+                remindersMinutes.add(reminder.getMinutes());
+            }
+            json.put("remindersMethods", remindersMethods);
+            json.put("remindersMinutes", remindersMinutes);
         }
-        json.put("remindersMethods", remindersMethods);
-        json.put("remindersMinutes", remindersMinutes);
+
         json.put("recurrences", e.getRecurrence());
-
         json.put("subject", "[THE AREA] event " + e.getDescription());
         json.put("bodyText", "Start : " + start.toStringRfc3339() +
                 "\nEnd : " + end.toStringRfc3339() +
