@@ -136,25 +136,6 @@ public class NavigatorUI extends UI {
                 }
             }
         }, 10000, 10000);
-//
-//        ServletContext ctx = VaadinServlet.getCurrent().getServletContext();
-//        StdSchedulerFactory factory = (StdSchedulerFactory) ctx.getAttribute("org.quartz.impl.StdSchedulerFactory.KEY");
-//        try {
-//            Scheduler scheduler = factory.getScheduler("LenartScheduler");
-//            if (scheduler != null) {
-//                JobDetail jobDetail =
-//                        newJob(MainJob.class).storeDurably().withIdentity("MAIN_JOB").withDescription("Main Job to Perform")
-//                                .build();
-//
-//                Trigger trigger =
-//                        newTrigger().forJob(jobDetail).withIdentity("MAIN_JOB_TRIGG").withDescription("Trigger for Main Job")
-//                                .withSchedule(simpleSchedule().withIntervalInSeconds(60).repeatForever()).startNow().build();
-//
-//                scheduler.scheduleJob(jobDetail, trigger);
-//            }
-//        } catch (SchedulerException e) {
-//            e.printStackTrace();
-//        }
     }
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)

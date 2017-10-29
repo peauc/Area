@@ -27,12 +27,14 @@ public class ApiUtils {
 
 	public static final Map<String, String> corrTableActionName = new HashMap<String, String>() {{
 		put("FACEBOOK : On friend request", "eu.epitech.action.ActionExample");
+		put("TWITTER : On mention", "eu.epitech.action.ActionNewTweet");
 		put("GOOGLE CALENDAR : On event creation", "eu.epitech.action.ActionGCalendar");
 	}};
 
 	public static final Map<String, String> corrTableReactionName = new HashMap<String, String>() {{
 		put("TWITTER : Send private message", "eu.epitech.reaction.ReactionExample");
 		put("GOOGLE CALENDAR : Create an event", "eu.epitech.reaction.ReactionGCalendar");
+		put("TWITTER : On mention, send the same tweet", "eu.epitech.reaction.ReactionNewTweet");
 	}};
 
 	public static final ArrayList<AAction> availableActions = new ArrayList<AAction>() {{

@@ -1,6 +1,6 @@
 package eu.epitech.views;
 
-import com.github.scribejava.apis.TwitterApi;
+import com.github.scribejava.core.builder.api.DefaultApi10a;
 import com.github.scribejava.core.model.Token;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
@@ -11,22 +11,19 @@ import eu.epitech.Listener;
 import eu.epitech.action.ActionNewTweet;
 import org.vaadin.addon.oauthpopup.OAuthListener;
 import org.vaadin.addon.oauthpopup.OAuthPopupButton;
-import org.vaadin.addon.oauthpopup.buttons.TwitterButton;
+import org.vaadin.addon.oauthpopup.OAuthPopupOpener;
 
 public class ConnectionButtons {
 
-    public Button addTwitterButtons() {
-        ApiInfo api = new ApiInfo("Twitter", TwitterApi.instance(),
-                "42AriIXIIgxEFeU9YHTrmdR85",
-                "wITToqSU0GOM5u5xeNv7GXbFmffdSDqgZrvtH4Hrr6Hftjtu4M",
-                "https://api.twitter.com/1.1/statuses/mentions_timeline.json");
-        OAuthPopupButton button = new TwitterButton(api.apiKey, api.apiSecret);
-        button.addOAuthListener(new OAuthListener() {
+    public OAuthPopupOpener addTwitterButtons() {
+
+        OAuthPopupOpener opener = new OAuthPopupOpener((DefaultApi10a) ApiInfo.TwitterInfo.scribeApi, ApiInfo.TwitterInfo.apiKey, ApiInfo.TwitterInfo.apiSecret);
+        opener.addOAuthListener(new OAuthListener() {
             @Override
             public void authSuccessful(Token token, boolean isOAuth20) {
                 Notification.show("authSuccessful");
                 Twitter.setToken(token);
-                Twitter.setApiInfo(api);
+                Twitter.setApiInfo(ApiInfo.TwitterInfo);
                 Twitter.setoAuthService(Twitter.createOAuthService());
                 Twitter.setIsLoged(true);
                 Twitter.getHandle(Twitter.getToken());
@@ -39,7 +36,7 @@ public class ConnectionButtons {
                 Notification.show("authDenied");
             }
         });
-        return (button);
+        return (opener);
     }
 
     private Button makeTestButton(final ApiInfo service, OAuthPopupButton button) {
