@@ -32,7 +32,7 @@ public class ApiUtils {
 	}};
 
 	public static final Map<String, String> corrTableReactionName = new HashMap<String, String>() {{
-		put("GOOGLE CALENDAR : Create an event", "eu.epitech.reaction.ReactionGCalendar");
+//		put("GOOGLE CALENDAR : Create an event", "eu.epitech.reaction.ReactionGCalendar");
 		put("GOOGLE GMAIL : Send mail", "eu.epitech.reaction.ReactionSendGmail");
 		put("TWITTER : On mention, send the same tweet", "eu.epitech.reaction.ReactionNewTweet");
 		put("TWITTER : Retweet on mention", "eu.epitech.reaction.ReactionRetweet");
@@ -45,7 +45,7 @@ public class ApiUtils {
 
 	public static final ArrayList<AReaction> availableReactions = new ArrayList<AReaction>() {{
 		add(new ReactionNewTweet());
-		add(new ReactionGCalendar());
+//		add(new ReactionGCalendar());
 		add(new ReactionSendGmail());
 		add(new ReactionRetweet());
 	}};
