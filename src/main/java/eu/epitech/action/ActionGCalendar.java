@@ -164,6 +164,7 @@ public class ActionGCalendar extends AAction {
                 if (isNewEvent(event))
                 {
                     eventsStore.add(translate(event));
+                    previousDatas.put("lastSyncDate", event.getCreated().getValue());
                     actionFound = true;
                 }
             }
@@ -175,7 +176,6 @@ public class ActionGCalendar extends AAction {
         if (previousDatas == null)
             previousDatas = new JSONObject();
         previousDatas.put("lastSyncToken", lastSyncToken);
-        previousDatas.put("lastSyncDate", System.currentTimeMillis());
         return actionFound;
     }
 
