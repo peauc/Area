@@ -6,7 +6,10 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import eu.epitech.*;
+import eu.epitech.DemoLayout;
+import eu.epitech.NavigatorUI;
+import eu.epitech.Stock;
+import eu.epitech.User;
 
 import static eu.epitech.NavigatorUI.dbm;
 

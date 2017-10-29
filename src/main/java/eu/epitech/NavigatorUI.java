@@ -13,7 +13,6 @@ import eu.epitech.action.ActionNewTweet;
 import eu.epitech.reaction.ReactionNewTweet;
 import eu.epitech.views.*;
 import org.json.JSONObject;
-import eu.epitech.views.*;
 import org.pmw.tinylog.Logger;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -21,10 +20,9 @@ import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.impl.StdSchedulerFactory;
 
-import javax.servlet.annotation.WebServlet;
-import java.util.TimerTask;
 import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebServlet;
+import java.util.TimerTask;
 
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
