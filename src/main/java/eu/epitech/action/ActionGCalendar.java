@@ -20,7 +20,6 @@ public class ActionGCalendar extends AAction {
     private String lastSyncToken = null;
     private long lastSyncDate = 0;
     private ArrayList<JSONObject> eventsStore = new ArrayList<>();
-    private boolean onesync = false;
 
     public ActionGCalendar() {
         this.api = ApiUtils.Name.GOOGLE_CALENDAR;
@@ -169,8 +168,7 @@ public class ActionGCalendar extends AAction {
             for (Event event : items) {
                 if (isNewEvent(event))
                 {
-                    if (onesync)
-                        eventsStore.add(translate(event));
+                    eventsStore.add(translate(event));
                     previousDatas.put("lastSyncDate", event.getCreated().getValue());
                     actionFound = true;
                 }
@@ -179,7 +177,6 @@ public class ActionGCalendar extends AAction {
         } while (pageToken != null);
 
         lastSyncToken = events.getNextSyncToken();
-        onesync = true;
         previousDatas.put("lastSyncToken", lastSyncToken);
 
         return actionFound;
