@@ -193,7 +193,7 @@ public class ActionGCalendar extends AAction {
 
     @Override
     public boolean hasHappened(Map<ApiUtils.Name, String> tokens) {
-        if (previousDatas != null)
+        if (previousDatas != null && previousDatas.has("lastSyncDate"))
             lastSyncDate = previousDatas.getLong("lastSyncDate");
         return process();
     }
