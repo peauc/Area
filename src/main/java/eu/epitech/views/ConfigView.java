@@ -102,11 +102,15 @@ public class ConfigView extends AbsoluteLayout implements View {
         this.actionTf = new Label((this.action.configFields() != null && this.action.configFields().keySet().size() != 0) ? "Config Action" : "Nothing to config");
         this.reactionTf = new Label((this.reaction.configFields() != null && this.reaction.configFields().keySet().size() != 0) ? "Config Reaction" : "Nothing to config");
 
-        for (String field : this.action.configFields().keySet()) {
-            actionConfig.add(new TextField(field));
+        if (this.action.configFields() != null) {
+            for (String field : this.action.configFields().keySet()) {
+                actionConfig.add(new TextField(field));
+            }
         }
-        for (String field : this.reaction.configFields().keySet()) {
-            reactionConfig.add(new TextField(field));
+        if (this.reaction.getRequiredConfigFields() != null){
+            for (String field : this.reaction.configFields().keySet()) {
+                reactionConfig.add(new TextField(field));
+            }
         }
 
         addComponent(this.actionTf, "top: 150px; left: 50px");

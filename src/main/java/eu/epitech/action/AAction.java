@@ -19,7 +19,7 @@ public abstract class AAction implements IAction {
     protected String description;
     protected JSONObject config = null;
     protected JSONObject previousDatas = null;
-	protected List<String> fields;
+	protected List<String> fields = null;
     protected Map<String, FieldType> requiredConfigFields = null;
 
     public Boolean getInitialized() {
@@ -86,7 +86,7 @@ public abstract class AAction implements IAction {
 	}
 
     @Override
-    public abstract boolean hasHappened();
+    public abstract boolean hasHappened(Map<ApiUtils.Name, String> tokens);
 
     @Override
     public abstract List<JSONObject> whatHappened();

@@ -20,14 +20,14 @@ public class ReactionNewTweet extends AReaction {
     private String handle;
     public ReactionNewTweet() {
         super();
-        setName("ReactionNewTweet");
+        this.api = ApiUtils.Name.TWITTER;
+        setName("TWITTER : On mention, send the same tweet");
         setDescription("Fire a new tweet with the text \"text\"");
         requiredActionFields = new ArrayList<>();
         requiredActionFields.add("text");
         requiredConfigFields = new ArrayMap<>();
+        requiredConfigFields.put("target", FieldType.STRING);
         config = new JSONObject();
-        config.put("target", "@Nova4u");
-        handle = Twitter.getHandle(Twitter.getToken());
     }
 
     @Override
@@ -115,11 +115,6 @@ public class ReactionNewTweet extends AReaction {
                 }
             }
         }
-    }
-
-    @Override
-    public boolean isExecutable(List<String> fields) {
-        return false;
     }
 
     @Override

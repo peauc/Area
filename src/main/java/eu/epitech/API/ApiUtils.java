@@ -19,6 +19,7 @@ public class ApiUtils {
 	}
 	public static final Map<String, Name> corrTableName = new HashMap<String, Name>() {{
 		put("TWITTER", Name.TWITTER);
+		put("TWITTER_SECRET", Name.TWITTER_SECRET);
 		put("LINKEDIN", Name.LINKEDIN);
 		put("GOOGLE_CALENDAR", Name.GOOGLE_CALENDAR);
 	}};

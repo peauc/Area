@@ -109,7 +109,7 @@ public class NavigatorUI extends UI {
 
                 Trigger trigger =
                         newTrigger().forJob(jobDetail).withIdentity("MAIN_JOB_TRIGG").withDescription("Trigger for Main Job")
-                                .withSchedule(simpleSchedule().withIntervalInSeconds(60).repeatForever()).startNow().build();
+                                .withSchedule(simpleSchedule().withIntervalInSeconds(5).repeatForever()).startNow().build();
 
                 scheduler.scheduleJob(jobDetail, trigger);
             }
