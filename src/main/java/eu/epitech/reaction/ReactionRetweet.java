@@ -30,6 +30,8 @@ public class ReactionRetweet extends AReaction {
 
     @Override
     public void execute(Map<ApiUtils.Name, String> tokens, JSONObject actionOutput) {
+        if (tokens == null || tokens.size() == 0 || tokens.get(ApiUtils.Name.TWITTER_SECRET) == null || tokens.get(ApiUtils.Name.TWITTER) == null)
+            return;
           BigInteger id = actionOutput.getBigInteger("id");
         try {
             Twitter.send("https://api.twitter.com/1.1/statuses/retweet/" + id + ".json", Verb.POST, new OAuth1AccessToken(tokens.get(ApiUtils.Name.TWITTER), tokens.get(ApiUtils.Name.TWITTER_SECRET)), ApiInfo.TwitterInfo);

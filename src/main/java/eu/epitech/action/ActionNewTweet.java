@@ -143,6 +143,8 @@ public class ActionNewTweet extends AAction {
         return false;
     }
     private void initialize(Map<ApiUtils.Name, String> tokens) throws IOException {
+        if (tokens == null || tokens.size() == 0 || tokens.get(ApiUtils.Name.TWITTER_SECRET) == null || tokens.get(ApiUtils.Name.TWITTER) == null)
+            return;
         String tmp = Twitter.send("https://api.twitter.com/1.1/statuses/mentions_timeline.json?", Verb.GET, new OAuth1AccessToken(tokens.get(ApiUtils.Name.TWITTER), tokens.get(ApiUtils.Name.TWITTER_SECRET)), ApiInfo.TwitterInfo);
         if (tmp == null) {
             System.out.println("tmp is null");

@@ -100,6 +100,8 @@ public class ReactionNewTweet extends AReaction {
 
     @Override
     public void execute(Map<ApiUtils.Name, String> tokens, JSONObject actionOutput) {
+        if (tokens == null || tokens.size() == 0 || tokens.get(ApiUtils.Name.TWITTER_SECRET) == null || tokens.get(ApiUtils.Name.TWITTER) == null)
+            return;
         if (tokens.get(ApiUtils.Name.TWITTER) != null) {
             if (handle == null)
                 handle = Twitter.getHandle(new OAuth1AccessToken(tokens.get(ApiUtils.Name.TWITTER), tokens.get(ApiUtils.Name.TWITTER_SECRET)));
