@@ -122,7 +122,9 @@ public class ConfigView extends AbsoluteLayout implements View {
             addComponent(txt, "top: " + Integer.toString(reactionHeight) + "px; left: 400px;");
             reactionHeight += 100;
         }
-        addComponent(validateButton(), "top: " + Integer.toString((actionHeight > reactionHeight) ? actionHeight : reactionHeight) + "px; left: 200px;");
+        Button b = validateButton();
+        ConnectionButtons.addTwitterButtons(user).extend(b);
+        addComponent(b, "top: " + Integer.toString((actionHeight > reactionHeight) ? actionHeight : reactionHeight) + "px; left: 200px;");
     }
 
     private Button validateButton() {

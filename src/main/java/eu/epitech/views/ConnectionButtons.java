@@ -8,10 +8,9 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
 import eu.epitech.API.ApiInfo;
 import eu.epitech.API.ApiUtils;
-import eu.epitech.API.Twitter;
 import eu.epitech.Listener;
+import eu.epitech.NavigatorUI;
 import eu.epitech.User;
-import eu.epitech.action.ActionNewTweet;
 import org.vaadin.addon.oauthpopup.OAuthListener;
 import org.vaadin.addon.oauthpopup.OAuthPopupButton;
 import org.vaadin.addon.oauthpopup.OAuthPopupOpener;
@@ -24,21 +23,15 @@ public class ConnectionButtons {
         opener.addOAuthListener(new OAuthListener() {
             @Override
             public void authSuccessful(Token token, boolean isOAuth20) {
-                Notification.show("authSuccessful");
                 u.setIdToken(ApiUtils.Name.TWITTER, ((OAuth1AccessToken) token).getToken());
                 u.setIdToken(ApiUtils.Name.TWITTER_SECRET, ((OAuth1AccessToken) token).getTokenSecret());
-                Token t = new OAuth1AccessToken(u.getIdToken(ApiUtils.Name.TWITTER,))
-                Twitter.setApiInfo(ApiInfo.TwitterInfo);
-                Twitter.setoAuthService(Twitter.createOAuthService());
-                Twitter.setIsLoged(true);
-                Twitter.getHandle(Twitter.getToken());
-                ActionNewTweet actionNewTweet = new ActionNewTweet();
-                actionNewTweet.hasHappened();
+                u.addTokenToDatabase(NavigatorUI.dbm, ApiUtils.Name.TWITTER);
+                u.addTokenToDatabase(NavigatorUI.dbm, ApiUtils.Name.TWITTER_SECRET);
             }
 
             @Override
             public void authDenied(String reason) {
-                Notification.show("authDenied");
+                Notification.show("Twitter login denied :" + reason);
             }
         });
         return (opener);
