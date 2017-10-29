@@ -44,7 +44,11 @@ public class ActionGCalendar extends AAction {
     }
 
     private Events fullSync(Calendar calendar) throws Exception {
-        DateTime now = new DateTime(System.currentTimeMillis());
+        DateTime now;
+        if (previousDatas != null)
+            now = new DateTime(lastSyncDate);
+        else
+            now = new DateTime(System.currentTimeMillis());
         return calendar.events().list("primary")
                 .setTimeMin(now)
                 .setOrderBy("startTime")
