@@ -19,7 +19,7 @@ public class ReactionRetweet extends AReaction {
     public ReactionRetweet() {
         super();
         this.api = ApiUtils.Name.TWITTER;
-        setName("TWITTER : On mention, retweet");
+        setName("TWITTER : Retweet on mention");
         setDescription("Each time you are mentioned, the tweet is automatically retweeted");
         requiredActionFields = new ArrayList<>();
         requiredActionFields.add("id");

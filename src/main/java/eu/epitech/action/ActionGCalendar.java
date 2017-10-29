@@ -180,6 +180,8 @@ public class ActionGCalendar extends AAction {
     }
 
     private boolean isNewEvent(Event event) {
+        System.out.println(event.getCreated().getValue());
+        System.out.println(lastSyncDate);
         return event.getCreated().getValue() > lastSyncDate;
     }
 

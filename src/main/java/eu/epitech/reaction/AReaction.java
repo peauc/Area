@@ -187,6 +187,8 @@ public abstract class AReaction implements IReaction {
 
 	@Override
 	public boolean setConfig(JSONObject conf) {
+		if (requiredConfigFields == null || requiredConfigFields.size() == 0)
+			return true;
 		config = new JSONObject();
 		for (Map.Entry<String, FieldType> field : requiredConfigFields.entrySet())
 		{
