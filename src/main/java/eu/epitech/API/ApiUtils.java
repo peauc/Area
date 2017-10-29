@@ -3,10 +3,7 @@ package eu.epitech.API;
 import eu.epitech.action.AAction;
 import eu.epitech.action.ActionGCalendar;
 import eu.epitech.action.ActionNewTweet;
-import eu.epitech.reaction.AReaction;
-import eu.epitech.reaction.ReactionGCalendar;
-import eu.epitech.reaction.ReactionNewTweet;
-import eu.epitech.reaction.ReactionSendGmail;
+import eu.epitech.reaction.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +47,7 @@ public class ApiUtils {
 		add(new ReactionNewTweet());
 		add(new ReactionGCalendar());
 		add(new ReactionSendGmail());
+		add(new ReactionRetweet());
 	}};
 
 	public static AAction createActionFromName(String name) {

@@ -11,6 +11,7 @@ import eu.epitech.FieldType;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,7 @@ public class ReactionRetweet extends AReaction {
     public ReactionRetweet() {
         super();
         this.api = ApiUtils.Name.TWITTER;
-        setName("TWITTER : On mention, retweet");
+        setName("TWITTER : Retweet on mention");
         setDescription("Each time you are mentioned, the tweet is automatically retweeted");
         requiredActionFields = new ArrayList<>();
         requiredActionFields.add("id");
@@ -29,9 +30,7 @@ public class ReactionRetweet extends AReaction {
 
     @Override
     public void execute(Map<ApiUtils.Name, String> tokens, JSONObject actionOutput) {
-          String id = actionOutput.getString("id");
-          if (id == null)
-              return ;
+          BigInteger id = actionOutput.getBigInteger("id");
         try {
             Twitter.send("https://api.twitter.com/1.1/statuses/retweet/" + id + ".json", Verb.POST, new OAuth1AccessToken(tokens.get(ApiUtils.Name.TWITTER), tokens.get(ApiUtils.Name.TWITTER_SECRET)), ApiInfo.TwitterInfo);
         } catch (IOException e) {
