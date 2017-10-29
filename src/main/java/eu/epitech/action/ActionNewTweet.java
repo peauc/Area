@@ -32,6 +32,7 @@ public class ActionNewTweet extends AAction {
         this.fields = new ArrayList<>();
         this.fields.add("text");
         this.fields.add("tweet");
+        this.fields.add("id");
         this.config = new JSONObject();
     }
 
