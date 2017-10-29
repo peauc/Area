@@ -45,7 +45,7 @@ public class ActionGCalendar extends AAction {
 
     private Events fullSync(Calendar calendar) throws Exception {
         DateTime now;
-        if (previousDatas != null)
+        if (previousDatas != null && previousDatas.has("lastSyncDate"))
             now = new DateTime(lastSyncDate);
         else
             now = new DateTime(System.currentTimeMillis());
@@ -143,6 +143,9 @@ public class ActionGCalendar extends AAction {
             lastSyncToken = null;
         }
 
+        if (previousDatas == null)
+            previousDatas = new JSONObject();
+
         do {
             try {
                 events = syncCalendar(calendar);
@@ -173,9 +176,6 @@ public class ActionGCalendar extends AAction {
         } while (pageToken != null);
 
         lastSyncToken = events.getNextSyncToken();
-
-        if (previousDatas == null)
-            previousDatas = new JSONObject();
 
         previousDatas.put("lastSyncToken", lastSyncToken);
 
