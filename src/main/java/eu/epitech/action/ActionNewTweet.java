@@ -151,8 +151,8 @@ public class ActionNewTweet extends AAction {
         if (response.length() == 0) {
             System.out.println("Json is empty");
             setInitialized(true);
-        }
-        System.out.println(previousDatas);
+        };
+        System.out.println("previous : " + previousDatas);
         System.out.println("Initalized\n\n");
         setInitialized(true);
         JSONObject object = response.getJSONObject(0);
