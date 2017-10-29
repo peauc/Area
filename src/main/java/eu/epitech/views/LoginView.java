@@ -52,6 +52,10 @@ public class LoginView extends AbsoluteLayout implements View {
                 if (stock.getPrompt() != null) {
                     addComponent(new Label(stock.getPrompt()), "left: 50px; top: 300;");
                 }
+                if (stock.getUser() != null) {
+                    NavigatorUI.putData(getUI(), new Stock(stock.getUser(), null, null, stock.getPrompt()));
+                    getUI().getNavigator().navigateTo("action");
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

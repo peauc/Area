@@ -182,6 +182,7 @@ public class ConfigView extends AbsoluteLayout implements View {
                 reaction.setConfig(confReaction);
                 Area area = new Area(action, reaction, user);
                 area.addToDatabase(dbm);
+                user.addArea(area);
                 NavigatorUI.putData(getUI(), new Stock(user, null, null, "AREA validated and set."));
                 getUI().getNavigator().navigateTo("action");
             }

@@ -76,6 +76,7 @@ public class CreateAccountView extends AbsoluteLayout implements View {
                 User user = new User(username.getValue(), password.getValue());
                 user.addToDatabase(dbm);
                 // Fill object UserInfo, with the username : username && the password associated : password
+                NavigatorUI.putData(getUI(), new Stock(user, null, null, null));
                 getUI().getNavigator().navigateTo("login");
             }
         }
