@@ -132,7 +132,7 @@ public class ActionGCalendar extends AAction {
         String pageToken;
         Events events;
         boolean actionFound = false;
-        if (previousDatas != null) {
+        if (previousDatas != null && previousDatas.has("lastSyncToken")) {
             lastSyncToken = previousDatas.getString("lastSyncToken");
         }
 
