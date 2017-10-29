@@ -36,7 +36,7 @@ public class ApiUtils {
 
 	public static final Map<String, String> corrTableReactionName = new HashMap<String, String>() {{
 		put("GOOGLE CALENDAR : Create an event", "eu.epitech.reaction.ReactionGCalendar");
-		put("GOOGLE GMAIL : Send mail", "eu.epitech.reaction.ReactionSendGMail");
+		put("GOOGLE GMAIL : Send mail", "eu.epitech.reaction.ReactionSendGmail");
 		put("TWITTER : On mention, send the same tweet", "eu.epitech.reaction.ReactionNewTweet");
 	}};
 

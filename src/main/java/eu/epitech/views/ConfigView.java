@@ -8,6 +8,8 @@ import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
+import eu.epitech.API.ApiGCalendar;
+import eu.epitech.API.ApiGGmail;
 import eu.epitech.API.ApiUtils;
 import eu.epitech.Area;
 import eu.epitech.NavigatorUI;
@@ -17,6 +19,7 @@ import eu.epitech.action.AAction;
 import eu.epitech.reaction.AReaction;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static eu.epitech.NavigatorUI.dbm;
@@ -130,6 +133,18 @@ public class ConfigView extends AbsoluteLayout implements View {
         Button b = validateButton();
         if (this.action.getApi() == ApiUtils.Name.TWITTER || this.reaction.getApi() == ApiUtils.Name.TWITTER)
             ConnectionButtons.addTwitterButtons(user).extend(b);
+        if (this.action.getApi() == ApiUtils.Name.GOOGLE_GMAIL || this.reaction.getApi() == ApiUtils.Name.GOOGLE_GMAIL)
+            try {
+                ApiGGmail.getGmailService();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        if (this.action.getApi() == ApiUtils.Name.GOOGLE_CALENDAR || this.reaction.getApi() == ApiUtils.Name.GOOGLE_CALENDAR)
+            try {
+                ApiGCalendar.getCalendarService();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         addComponent(b, "top: " + Integer.toString((actionHeight > reactionHeight) ? actionHeight : reactionHeight) + "px; left: 200px;");
     }
 

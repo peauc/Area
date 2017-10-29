@@ -16,6 +16,7 @@ import org.pmw.tinylog.Logger;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class ApiGGmail extends AApi {
      */
     private static Credential authorize() throws IOException {
         // Load client secrets.
-        InputStream in = ApiGGmail.class.getResourceAsStream("./.gmail/gmail_secret.json");
+        InputStream in = ApiGGmail.class.getResourceAsStream("/.gmail/gmail_secret.json");
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
         // Build flow and trigger user authorization request.
@@ -72,7 +73,14 @@ public class ApiGGmail extends AApi {
      * @throws IOException
      */
     public static com.google.api.services.gmail.Gmail getGmailService() throws IOException {
-        Credential credential = authorize();
+        Credential credential = null;
+        try {
+            credential = authorize();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
         return new com.google.api.services.gmail.Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
                 .setApplicationName(APPLICATION_NAME)
                 .build();
