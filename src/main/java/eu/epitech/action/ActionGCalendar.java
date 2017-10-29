@@ -111,7 +111,11 @@ public class ActionGCalendar extends AAction {
         }
 
         json.put("recurrences", e.getRecurrence());
-        json.put("subject", "[THE AREA] event " + e.getDescription());
+        if (e.getDescription() != null)
+            json.put("subject", "[THE AREA] event : " + e.getDescription());
+        else
+            json.put("subject", "[THE AREA] New event");
+
         json.put("bodyText", "Start : " + start.toStringRfc3339() +
                 "\nEnd : " + end.toStringRfc3339() +
                 "\nSummary : " + e.getSummary() +
@@ -134,6 +138,8 @@ public class ActionGCalendar extends AAction {
         boolean actionFound = false;
         if (previousDatas != null && previousDatas.has("lastSyncToken")) {
             lastSyncToken = previousDatas.getString("lastSyncToken");
+        } else {
+            lastSyncToken = null;
         }
 
         do {
