@@ -5,6 +5,7 @@ import com.github.scribejava.core.model.Verb;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.common.collect.ImmutableList;
+import eu.epitech.API.ApiInfo;
 import eu.epitech.API.ApiUtils;
 import eu.epitech.API.Twitter;
 import eu.epitech.Area;
@@ -113,7 +114,7 @@ public class ActionNewTweet extends AAction {
             }
         } else {
             try {
-                String tmp = Twitter.send("https://api.twitter.com/1.1/statuses/mentions_timeline.json", Verb.GET, new OAuth1AccessToken(tokens.get(ApiUtils.Name.TWITTER), tokens.get(ApiUtils.Name.TWITTER_SECRET)));
+                String tmp = Twitter.send("https://api.twitter.com/1.1/statuses/mentions_timeline.json", Verb.GET, new OAuth1AccessToken(tokens.get(ApiUtils.Name.TWITTER), tokens.get(ApiUtils.Name.TWITTER_SECRET)), ApiInfo.TwitterInfo);
                 if (tmp != null) {
                     JSONArray array = new JSONArray(tmp);
                     for (Integer i = 0; i < array.length(); i++) {
@@ -140,7 +141,7 @@ public class ActionNewTweet extends AAction {
         return false;
     }
     private void initialize(Map<ApiUtils.Name, String> tokens) throws IOException {
-        String tmp = Twitter.send("https://api.twitter.com/1.1/statuses/mentions_timeline.json?", Verb.GET, new OAuth1AccessToken(tokens.get(ApiUtils.Name.TWITTER), tokens.get(ApiUtils.Name.TWITTER_SECRET)));
+        String tmp = Twitter.send("https://api.twitter.com/1.1/statuses/mentions_timeline.json?", Verb.GET, new OAuth1AccessToken(tokens.get(ApiUtils.Name.TWITTER), tokens.get(ApiUtils.Name.TWITTER_SECRET)), ApiInfo.TwitterInfo);
         if (tmp == null) {
             System.out.println("tmp is null");
             setInitialized(false);

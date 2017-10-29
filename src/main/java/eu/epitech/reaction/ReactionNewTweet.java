@@ -3,6 +3,7 @@ package eu.epitech.reaction;
 import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.model.Verb;
 import com.google.api.client.util.ArrayMap;
+import eu.epitech.API.ApiInfo;
 import eu.epitech.API.ApiUtils;
 import eu.epitech.API.Twitter;
 import eu.epitech.Area;
@@ -109,7 +110,7 @@ public class ReactionNewTweet extends AReaction {
                     text = text.replace("@"+handle, "");
                     System.err.println(text);
                     String URLEncodedString = URLEncoder.encode(string + text, "UTF-8");
-                    Twitter.send("https://api.twitter.com/1.1/statuses/update.json?status=" + URLEncodedString, Verb.POST, Twitter.getToken());
+                    Twitter.send("https://api.twitter.com/1.1/statuses/update.json?status=" + URLEncodedString, Verb.POST, new OAuth1AccessToken(tokens.get(ApiUtils.Name.TWITTER), tokens.get(ApiUtils.Name.TWITTER_SECRET)), ApiInfo.TwitterInfo);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
