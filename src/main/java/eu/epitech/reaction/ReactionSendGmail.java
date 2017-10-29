@@ -28,7 +28,7 @@ public class ReactionSendGmail extends AReaction {
         this.description = "Create a new event in the associated Calendar account";
         this.requiredActionFields = new ArrayList<>();
         this.requiredActionFields.add("subject");
-        this.requiredActionFields.add("bodyText");
+        this.requiredActionFields.add("text");
         this.requiredConfigFields = new HashMap<>();
         this.requiredConfigFields.put("email", FieldType.EMAIL);
         this.config = null;
@@ -101,7 +101,7 @@ public class ReactionSendGmail extends AReaction {
             MimeMessage message = createEmail(config.getString("email"),
                     "java.area.epitech@gmail.com",
                     actionOutput.getString("subject"),
-                    actionOutput.getString("bodyText"));
+                    actionOutput.getString("text"));
             sendMessage(ApiGGmail.getGmailService(), "me", message);
         } catch (MessagingException e) {
             Logger.error("Error occurred during Mime message creation");
