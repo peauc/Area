@@ -39,7 +39,7 @@ public class ActionGCalendar extends AAction {
         this.fields.add("attachments");
         this.fields.add("remainders");
         this.fields.add("subject");
-        this.fields.add("bodyText");
+        this.fields.add("text");
         this.requiredConfigFields = new HashMap<>();
         this.requiredConfigFields.put("email", FieldType.EMAIL);
         this.config = null;
@@ -116,7 +116,7 @@ public class ActionGCalendar extends AAction {
         else
             json.put("subject", "[THE AREA] New event");
 
-        json.put("bodyText", "Start : " + start.toStringRfc3339() +
+        json.put("text", "Start : " + start.toStringRfc3339() +
                 "\nEnd : " + end.toStringRfc3339() +
                 "\nSummary : " + e.getSummary() +
                 "\nLocation : " + e.getLocation());
