@@ -38,6 +38,8 @@ public class ActionGCalendar extends AAction {
         this.fields.add("attendees");
         this.fields.add("attachments");
         this.fields.add("remainders");
+        this.fields.add("subject");
+        this.fields.add("bodyText");
         this.requiredConfigFields = new HashMap<>();
         this.requiredConfigFields.put("email", FieldType.EMAIL);
         this.config = null;
@@ -79,10 +81,12 @@ public class ActionGCalendar extends AAction {
 
         DateTime start = e.getStart().getDateTime();
         DateTime end = e.getEnd().getDateTime();
+        start = start == null ? e.getStart().getDate() : start;
+        end = end == null ? e.getEnd().getDate() : end;
 
-        json.put("start", start == null ? e.getStart().getDate() : start);
+        json.put("start", start);
         json.put("timezone", e.getStart().getTimeZone());
-        json.put("end", end == null ? e.getEnd().getDate() : end);
+        json.put("end", end);
         json.put("description", e.getDescription());
         json.put("location", e.getLocation());
         json.put("summary", e.getSummary());
@@ -102,6 +106,12 @@ public class ActionGCalendar extends AAction {
         json.put("remindersMethods", remindersMethods);
         json.put("remindersMinutes", remindersMinutes);
         json.put("recurrences", e.getRecurrence());
+
+        json.put("subject", "[THE AREA] event " + e.getDescription());
+        json.put("bodyText", "Start : " + start.toStringRfc3339() +
+                "\nEnd : " + end.toStringRfc3339() +
+                "\nSummary : " + e.getSummary() +
+                "\nLocation : " + e.getLocation());
         return json;
     }
 
