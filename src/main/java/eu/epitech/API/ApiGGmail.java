@@ -43,7 +43,6 @@ public class ApiGGmail extends AApi {
      */
     private static final List<String> SCOPES = Arrays.asList(GmailScopes.MAIL_GOOGLE_COM);
 
-
     /**
      * Creates an authorized Credential object.
      * @return an authorized Credential object.
