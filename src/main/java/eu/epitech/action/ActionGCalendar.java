@@ -14,14 +14,11 @@ import eu.epitech.FieldType;
 import org.json.JSONObject;
 import org.pmw.tinylog.Logger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ActionGCalendar extends AAction {
     private String lastSyncToken = null;
-    private long lastSyncDate;
+    private long lastSyncDate = 0;
     private ArrayList<JSONObject> eventsStore = new ArrayList<>();
 
     public ActionGCalendar() {
@@ -164,7 +161,6 @@ public class ActionGCalendar extends AAction {
                 if (isNewEvent(event))
                 {
                     eventsStore.add(translate(event));
-                    previousDatas.put("lastSyncDate", event.getCreated().getValue());
                     actionFound = true;
                 }
             }
@@ -175,7 +171,10 @@ public class ActionGCalendar extends AAction {
 
         if (previousDatas == null)
             previousDatas = new JSONObject();
+
         previousDatas.put("lastSyncToken", lastSyncToken);
+        previousDatas.put("lastSyncDate", System.currentTimeMillis());
+
         return actionFound;
     }
 
