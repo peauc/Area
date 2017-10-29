@@ -50,7 +50,7 @@ public class ApiGGmail extends AApi {
      */
     private static Credential authorize() throws IOException {
         // Load client secrets.
-        InputStream in = ApiGGmail.class.getResourceAsStream("./.gmail/gmail_secret.json");
+        InputStream in = ApiGGmail.class.getResourceAsStream("./.gmail/_secret.json");
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
         // Build flow and trigger user authorization request.
@@ -70,8 +70,14 @@ public class ApiGGmail extends AApi {
      * @return an authorized Gmail client service
      * @throws IOException
      */
-    public static com.google.api.services.gmail.Gmail getGmailService() throws IOException {
-        Credential credential = authorize();
+    public static com.google.api.services.gmail.Gmail getGmailService(){
+        Credential credential = null;
+        try {
+            credential = authorize();
+        } catch (IOException e) {
+            Logger.error("Error occurred during Gmail authorization request");
+            Logger.debug(e);
+        }
         return new com.google.api.services.gmail.Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
                 .setApplicationName(APPLICATION_NAME)
                 .build();
