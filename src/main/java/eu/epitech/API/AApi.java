@@ -75,17 +75,17 @@ public abstract class AApi {
         }
     }
 
-    public static String send(String URL, Verb mode, Token token) throws IOException {
-        if (ApiInfo.TwitterInfo == null || token == null) {
+    public static String send(String URL, Verb mode, Token token, ApiInfo info) throws IOException {
+        if (info == null || token == null) {
             System.out.println("send returning null");
             return null;
         }
-        oAuthService service = createOAuthService();
-        final OAuthRequest request = new OAuthRequest(mode, URL, getoAuthService());
+        OAuthService service = createOAuthService(info);
+        final OAuthRequest request = new OAuthRequest(mode, URL, service);
         if (getoAuthService() instanceof OAuth20Service) {
-            ((OAuth20Service) createOAuthService()).signRequest((OAuth2AccessToken)token, request);
+            ((OAuth20Service) service).signRequest((OAuth2AccessToken)token, request);
         } else {
-            ((OAuth10aService) createOAuthService()).signRequest((OAuth1AccessToken)token, request);
+            ((OAuth10aService) service).signRequest((OAuth1AccessToken)token, request);
         }
 
         Response resp = request.send();
