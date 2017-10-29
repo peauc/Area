@@ -38,6 +38,7 @@ public class ApiUtils {
 		put("GOOGLE CALENDAR : Create an event", "eu.epitech.reaction.ReactionGCalendar");
 		put("GOOGLE GMAIL : Send mail", "eu.epitech.reaction.ReactionSendGmail");
 		put("TWITTER : On mention, send the same tweet", "eu.epitech.reaction.ReactionNewTweet");
+		put("TWITTER : Retweet on mention", "eu.epitech.reaction.ReactionRetweet");
 	}};
 
 	public static final ArrayList<AAction> availableActions = new ArrayList<AAction>() {{

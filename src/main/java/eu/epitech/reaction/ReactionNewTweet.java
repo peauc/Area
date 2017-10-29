@@ -2,7 +2,10 @@ package eu.epitech.reaction;
 
 import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.model.Verb;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ArrayMap;
+import com.google.common.collect.ImmutableList;
 import eu.epitech.API.ApiInfo;
 import eu.epitech.API.ApiUtils;
 import eu.epitech.API.Twitter;
@@ -19,11 +22,15 @@ import java.util.Map;
 
 public class ReactionNewTweet extends AReaction {
     private String handle;
+    private static final JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+    List<String> params = ImmutableList.of("text", "id");
+    List<JSONObject> whatHappened = new ArrayList<>();
+
     public ReactionNewTweet() {
         super();
         this.api = ApiUtils.Name.TWITTER;
         setName("TWITTER : On mention, send the same tweet");
-        setDescription("Fire a new tweet with the text \"text\"");
+        setDescription("Fire a new tweet with the text \"text\" and to the user(s) in \"target\"");
         requiredActionFields = new ArrayList<>();
         requiredActionFields.add("text");
         requiredConfigFields = new ArrayMap<>();
