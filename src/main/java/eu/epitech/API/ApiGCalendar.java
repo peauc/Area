@@ -51,7 +51,7 @@ public class ApiGCalendar extends AApi {
      */
     private static Credential authorize() throws IOException {
         // Load client secrets.
-        InputStream in = ApiGCalendar.class.getResourceAsStream("./.calendar/calendar_secret.json");
+        InputStream in = ApiGCalendar.class.getResourceAsStream("/.calendar/calendar_secret.json");
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
         // Build flow and trigger user authorization request.

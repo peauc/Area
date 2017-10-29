@@ -23,8 +23,8 @@ import java.util.Properties;
 
 public class ReactionSendGmail extends AReaction {
     public ReactionSendGmail() {
-        this.api = ApiUtils.Name.GOOGLE_CALENDAR;
-        this.name = "GOOGLE CALENDAR : Create an event";
+        this.api = ApiUtils.Name.GOOGLE_GMAIL;
+        this.name = "GOOGLE GMAIL : Send mail";
         this.description = "Create a new event in the associated Calendar account";
         this.requiredActionFields = new ArrayList<>();
         this.requiredActionFields.add("subject");

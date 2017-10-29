@@ -86,7 +86,7 @@ public class ReactionView extends AbsoluteLayout implements View {
         int high = 50;
         for (int i = 0; i < ApiUtils.availableReactions.size(); i++) {
             if (ApiUtils.availableReactions.get(i).isExecutable(this.action.getFields())) {
-                addComponent(reactionsButton.get(i), "top: " + Integer.toString(high) + "px; left: 400px;");
+                addComponent(reactionsButton.get(i), "top: " + Integer.toString(high) + "px; left: 500px;");
                 high += 100;
             }
         }
@@ -96,7 +96,7 @@ public class ReactionView extends AbsoluteLayout implements View {
         Button button = new Button(txt, (Button.ClickListener) clickEvent -> {
         });
 
-        button.setWidth("300");
+        button.setWidth("400");
         button.setHeight("500");
         button.setResponsive(true);
         return button;
@@ -116,7 +116,7 @@ public class ReactionView extends AbsoluteLayout implements View {
             getUI().getNavigator().navigateTo("config" + "/" + titleAction + "-" + txt);
         });
 
-        button.setWidth("300");
+        button.setWidth("400");
         button.setHeight("100");
         button.setResponsive(true);
         return button;

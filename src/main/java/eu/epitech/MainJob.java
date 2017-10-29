@@ -48,7 +48,6 @@ public class MainJob implements Job {
 						System.out.println("        Description : " + area.getReaction().getDescription());
 
 						if (area.getAction().hasHappened(user.getIdTokens())) { // Checks if action has been triggered
-							System.out.println("HAS HAPPENED ! GONNA SPAM BROUT !");
 							List<JSONObject> events = area.getAction().whatHappened();
 							if (events != null) {
 								for (JSONObject event : events) {
@@ -57,6 +56,8 @@ public class MainJob implements Job {
 							}
 						}
 					}
+					area.getAction().addToDatabase(NavigatorUI.dbm, area);
+					area.getReaction().addToDatabase(NavigatorUI.dbm, area);
 				}
 			}
 			out.println("Done executing job.");
