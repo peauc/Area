@@ -109,7 +109,7 @@ public class ReactionNewTweet extends AReaction {
                     text = text.replace("@"+handle, "");
                     System.err.println(text);
                     String URLEncodedString = URLEncoder.encode(string + text, "UTF-8");
-                    Twitter.send("https://api.twitter.com/1.1/statuses/update.json?status=" + URLEncodedString, Verb.POST, new OAuth1AccessToken(tokens.get(ApiUtils.Name.TWITTER), tokens.get(ApiUtils.Name.TWITTER_SECRET)));
+                    Twitter.send("https://api.twitter.com/1.1/statuses/update.json?status=" + URLEncodedString, Verb.POST, Twitter.getToken());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
