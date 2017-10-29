@@ -90,7 +90,7 @@ public class ReactionNewTweet extends AReaction {
     }
 
     @Override
-    public void execute(String token, JSONObject actionOutput) {
+    public void execute(Map<ApiUtils.Name, String> tokens, JSONObject actionOutput) {
         if (Twitter.getIsLoged()) {
             if (handle == null)
                 handle = Twitter.getHandle(Twitter.getToken());

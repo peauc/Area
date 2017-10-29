@@ -50,7 +50,7 @@ public class MainJob implements Job {
 							List<JSONObject> events = area.getAction().whatHappened();
 							if (events != null) {
 								for (JSONObject event : events) {
-									area.getReaction().execute(user.getIdToken(area.getReaction().getApi()), event);
+									area.getReaction().execute(user.getIdTokens(), event);
 								}
 							}
 						}
