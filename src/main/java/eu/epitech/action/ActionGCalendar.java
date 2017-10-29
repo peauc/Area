@@ -121,6 +121,8 @@ public class ActionGCalendar extends AAction {
                 "\nEnd : " + end.toStringRfc3339() +
                 "\nSummary : " + e.getSummary() +
                 "\nLocation : " + e.getLocation());
+
+        lastSyncDate = e.getCreated().getValue();
         return json;
     }
 
@@ -169,7 +171,6 @@ public class ActionGCalendar extends AAction {
                 {
                     eventsStore.add(translate(event));
                     actionFound = true;
-                    previousDatas.put("lastSyncDate", System.currentTimeMillis());
                 }
             }
             pageToken = events.getNextPageToken();
