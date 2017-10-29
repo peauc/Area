@@ -213,6 +213,8 @@ public abstract class AAction implements IAction {
 
     @Override
     public boolean setConfig(JSONObject conf) {
+		if (requiredConfigFields == null || requiredConfigFields.size() == 0)
+			return true;
 		if (conf == null)
 			return false;
         config = new JSONObject();

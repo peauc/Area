@@ -67,6 +67,9 @@ public class ConfigView extends AbsoluteLayout implements View {
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
 
+        this.actionConfig.clear();
+        this.reactionConfig.clear();
+        removeAllComponents();
         try {
             Stock stock = (Stock) NavigatorUI.readData(getUI());
             if (stock != null) {

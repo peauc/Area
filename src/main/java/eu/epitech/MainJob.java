@@ -48,6 +48,7 @@ public class MainJob implements Job {
 						System.out.println("        Description : " + area.getReaction().getDescription());
 
 						if (area.getAction().hasHappened(user.getIdTokens())) { // Checks if action has been triggered
+							System.out.println("TRIGGERED");
 							List<JSONObject> events = area.getAction().whatHappened();
 							if (events != null) {
 								for (JSONObject event : events) {

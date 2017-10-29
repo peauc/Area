@@ -31,6 +31,7 @@ public class ActionNewTweet extends AAction {
         setDescription("Fire whenever you are mentioned on twitter");
         this.fields = new ArrayList<>();
         this.fields.add("text");
+        this.fields.add("subject");
         this.fields.add("tweet");
         this.fields.add("id");
         this.config = new JSONObject();
@@ -121,12 +122,10 @@ public class ActionNewTweet extends AAction {
                 if (tmp != null) {
                     JSONArray array = new JSONArray(tmp);
                     for (Integer i = 0; i < array.length(); i++) {
-                        System.out.println(array.getJSONObject(i));
-                        System.out.println(previousDatas);
-                        System.out.println("\n\n");
                         if (array.getJSONObject(i).get("id").equals(previousDatas.get("id"))) {
                             System.err.println("Found matching data " + i);
                             for (Integer j = 0; j < i; j++) {
+                                array.getJSONObject(j).put("subject", "NEW TWEET");
                                 getWhatHappened().add((JSONObject) array.get(j));
                             }
                             if (whatHappened.size() > 0)
