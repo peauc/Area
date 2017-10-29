@@ -1,9 +1,9 @@
 package eu.epitech.API;
 
 import eu.epitech.action.AAction;
-import eu.epitech.action.ActionExample;
+import eu.epitech.action.ActionNewTweet;
 import eu.epitech.reaction.AReaction;
-import eu.epitech.reaction.ReactionExample;
+import eu.epitech.reaction.ReactionNewTweet;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,37 +12,33 @@ import java.util.Map;
 public class ApiUtils {
 
 	public enum Name {
-		FACEBOOK,
 		TWITTER,
+		TWITTER_SECRET,
 		LINKEDIN,
 		GOOGLE_CALENDAR
 	}
-
 	public static final Map<String, Name> corrTableName = new HashMap<String, Name>() {{
-		put("FACEBOOK", Name.FACEBOOK);
 		put("TWITTER", Name.TWITTER);
 		put("LINKEDIN", Name.LINKEDIN);
 		put("GOOGLE_CALENDAR", Name.GOOGLE_CALENDAR);
 	}};
 
 	public static final Map<String, String> corrTableActionName = new HashMap<String, String>() {{
-		put("FACEBOOK : On friend request", "eu.epitech.action.ActionExample");
 		put("TWITTER : On mention", "eu.epitech.action.ActionNewTweet");
 		put("GOOGLE CALENDAR : On event creation", "eu.epitech.action.ActionGCalendar");
 	}};
 
 	public static final Map<String, String> corrTableReactionName = new HashMap<String, String>() {{
-		put("TWITTER : Send private message", "eu.epitech.reaction.ReactionExample");
 		put("GOOGLE CALENDAR : Create an event", "eu.epitech.reaction.ReactionGCalendar");
 		put("TWITTER : On mention, send the same tweet", "eu.epitech.reaction.ReactionNewTweet");
 	}};
 
 	public static final ArrayList<AAction> availableActions = new ArrayList<AAction>() {{
-		add(new ActionExample());
+		add(new ActionNewTweet());
 	}};
 
 	public static final ArrayList<AReaction> availableReactions = new ArrayList<AReaction>() {{
-		add(new ReactionExample());
+		add(new ReactionNewTweet());
 	}};
 
 	public static AAction createActionFromName(String name) {

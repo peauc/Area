@@ -17,6 +17,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 
@@ -94,7 +95,7 @@ public class ReactionSendGmail extends AReaction {
     }
 
     @Override
-    public void execute(String token, JSONObject actionOutput) {
+    public void execute(Map<ApiUtils.Name, String> tokens, JSONObject actionOutput) {
 
         try {
             MimeMessage message = createEmail(config.getString("email"),
